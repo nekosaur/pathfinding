@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.*?>
+<AnchorPane id="AnchorPane" minHeight="1024.0" minWidth="1274.0" prefHeight="1024.0" prefWidth="1274.0" styleClass="airpad" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nekosaur.pathfinding.gui.presentation.main.MainPresenter">
+   <children>
+      <SplitPane fx:id="splitPane" dividerPositions="0.75" layoutX="333.0" layoutY="208.0" prefHeight="1024.0" prefWidth="1274.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <Pane fx:id="paneLeft" minHeight="1024.0" minWidth="1024.0" prefHeight="1024.0" prefWidth="1024.0" SplitPane.resizableWithParent="false" />
+            <Pane fx:id="paneRight" minHeight="1024.0" minWidth="250.0" prefHeight="1024.0" prefWidth="250.0" SplitPane.resizableWithParent="false" />
+         </items></SplitPane>
+   </children>
+</AnchorPane>
