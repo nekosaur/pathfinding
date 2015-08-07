@@ -1,21 +1,38 @@
 package org.nekosaur.pathfinding.gui.business;
 
+import java.util.Optional;
 
+import org.nekosaur.pathfinding.lib.common.Vertex;
 
 /**
  * @author nekosaur
  */
 public class MapData {
 
-    public final int[][] vertices;
-    public final int[][] edges;
-    //public final Vertex start;
-    //public final Vertex goal;
+    private final int[][] vertices;
+    private final int[][] edges;
+    public final Vertex start;
+    public final Vertex goal;
 
-    public MapData(int[][] vertices, int[][] edges/*, Vertex start, Vertex goal*/) {
+    public MapData(int[][] vertices, int[][] edges) {
         this.vertices = vertices;
         this.edges = edges;
-        //this.start = start;
-        //this.goal = goal;
+        this.start = null;
+        this.goal = null;
+    }
+    
+    public MapData(int[][] vertices, int[][] edges, Vertex start, Vertex goal) {
+        this.vertices = vertices;
+        this.edges = edges;
+        this.start = start;
+        this.goal = goal;
+    }
+    
+    public Optional<int[][]> getVertices() {
+    	return Optional.of(vertices);
+    }
+    
+    public Optional<int[][]> getEdges() {
+    	return Optional.of(edges);
     }
 }

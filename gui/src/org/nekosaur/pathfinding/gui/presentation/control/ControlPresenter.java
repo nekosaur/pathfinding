@@ -98,10 +98,14 @@ public class ControlPresenter implements Initializable {
         System.out.println("Load");
 
         int[][] vertices = {
-                {0,0,0,0},
-                {0,1,0,0},
-                {0,0,0,0},
-                {0,0,0,0}
+                {0,0,0,0,0,0,0,0},
+                {0,1,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0},
+                {0,0,0,0,0,0,0,0}
         };
 
         controller.postEvent(new EditMapLoadEvent(new MapData(vertices, null)));
@@ -109,7 +113,7 @@ public class ControlPresenter implements Initializable {
 
     @FXML
     private void handleButtonStartClicked() {
-        //controller.start();
+        controller.find();
     }
 
     @FXML

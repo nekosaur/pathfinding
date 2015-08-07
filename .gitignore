@@ -34,3 +34,10 @@
 # IntelliJ
 /out/
 **/target/
+/bin/
+
+# Eclipse
+**/.settings
+**/.project
+**/.classpath
+**/*.map
