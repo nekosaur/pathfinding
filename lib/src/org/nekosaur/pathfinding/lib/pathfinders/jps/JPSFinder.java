@@ -16,7 +16,7 @@ import org.nekosaur.pathfinding.lib.node.Node;
 import org.nekosaur.pathfinding.lib.node.NodeState;
 import org.nekosaur.pathfinding.lib.node.NodeStatus;
 import org.nekosaur.pathfinding.lib.pathfinders.AbstractPathfinder;
-import org.nekosaur.pathfinding.lib.searchspaces.Grid;
+import org.nekosaur.pathfinding.lib.searchspaces.grid.Grid;
 
 
 public class JPSFinder extends AbstractPathfinder {
@@ -100,8 +100,7 @@ public class JPSFinder extends AbstractPathfinder {
             if (!jumpList.contains(jumpNode) || g < jumpNode.g) {
                 jumpNode.g = g;
                 jumpNode.h = weight * heuristic.calculate(jumpNode.delta(goalNode));
-                jumpNode.f = jumpNode.g + jumpNode.h;
-                
+
                 jumpNode.parent = currentNode;
 
                 if (!jumpList.contains(jumpNode)) {

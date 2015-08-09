@@ -1,13 +1,14 @@
 package org.nekosaur.pathfinding.lib.tests;
 
 import org.nekosaur.pathfinding.lib.common.Heuristics;
+import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.lib.common.Vertex;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
 import org.nekosaur.pathfinding.lib.interfaces.Pathfinder;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.pathfinders.astar.AStarFinder;
-import org.nekosaur.pathfinding.lib.searchspaces.Graph;
+import org.nekosaur.pathfinding.lib.searchspaces.graph.Graph;
 
 public class GraphTest {
 	
@@ -32,7 +33,7 @@ public class GraphTest {
 				{0,0,1,1,0}
 		};
 		
-		SearchSpace g = Graph.create(vertices, edges);
+		SearchSpace g = Graph.create(new MapData(vertices, edges));
 		
 		Pathfinder p = new AStarFinder();
 		

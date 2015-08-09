@@ -1,16 +1,5 @@
 package org.nekosaur.pathfinding.lib.tests;
 
-import org.nekosaur.pathfinding.lib.common.Heuristics;
-import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
-import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
-import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
-import org.nekosaur.pathfinding.lib.interfaces.Pathfinder;
-import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
-import org.nekosaur.pathfinding.lib.pathfinders.astar.AStarFinder;
-import org.nekosaur.pathfinding.lib.searchspaces.Grid;
-import org.nekosaur.pathfinding.lib.searchspaces.QuadTree;
-
 public class AStarTest {
 
 	public static void main(String[] args) {
@@ -38,6 +27,7 @@ public class AStarTest {
 		};
 		
 		//SearchSpace map = Grid.create(vertices, null, true);
+		/*
 		SearchSpace map = QuadTree.create(vertices, null);
 		
 		Pathfinder f = new AStarFinder();
@@ -57,7 +47,7 @@ public class AStarTest {
 			e.printStackTrace();
 		}
 		
-		
+		*/
 		
 	}
 }

@@ -1,4 +1,4 @@
-package org.nekosaur.pathfinding.gui.business;
+package org.nekosaur.pathfinding.lib.common;
 
 import java.util.Optional;
 
@@ -29,7 +29,7 @@ public class MapData {
     }
     
     public Optional<int[][]> getVertices() {
-    	return Optional.of(vertices);
+    	return Optional.ofNullable(vertices);
     }
     
     public Optional<int[][]> getEdges() {

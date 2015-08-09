@@ -1,29 +1,10 @@
 package org.nekosaur.pathfinding.lib.tests;
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
-import org.nekosaur.pathfinding.lib.common.Heuristics;
-import org.nekosaur.pathfinding.lib.common.Result;
 import org.nekosaur.pathfinding.lib.common.Vertex;
-import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
-import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
-import org.nekosaur.pathfinding.lib.interfaces.Pathfinder;
-import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.movingai.MovingAI;
-import org.nekosaur.pathfinding.lib.node.Node;
-import org.nekosaur.pathfinding.lib.node.NodeState;
-import org.nekosaur.pathfinding.lib.pathfinders.astar.AStarFinder;
-import org.nekosaur.pathfinding.lib.searchspaces.Grid;
-import org.nekosaur.pathfinding.lib.searchspaces.QuadTree;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
@@ -36,7 +17,8 @@ public class QuadTreeTest {
 	public static void main(String[] args) {
 		
 int[][] data = MovingAI.loadMap(System.getProperty("user.dir") + "\\" + "brc000d.map");
-		
+
+		/*
 		SearchSpace map = QuadTree.create(data, null);
 		
 		Pathfinder f = new AStarFinder();
@@ -55,7 +37,7 @@ int[][] data = MovingAI.loadMap(System.getProperty("user.dir") + "\\" + "brc000d
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		*/
 		/*
 		Result r;
 		try {

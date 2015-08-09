@@ -1,24 +1,10 @@
 package org.nekosaur.pathfinding.lib.tests;
 
-import java.util.concurrent.TimeUnit;
-
-import org.nekosaur.pathfinding.lib.common.Heuristics;
-import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
-import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
-import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
-import org.nekosaur.pathfinding.lib.interfaces.Pathfinder;
-import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
-import org.nekosaur.pathfinding.lib.movingai.MovingAI;
-import org.nekosaur.pathfinding.lib.pathfinders.astar.AStarFinder;
-import org.nekosaur.pathfinding.lib.pathfinders.jps.JPSFinder;
-import org.nekosaur.pathfinding.lib.searchspaces.Grid;
-import org.nekosaur.pathfinding.lib.searchspaces.QuadTree;
-
 public class JPSFinderTest {
 	
 	public static void main(String[] args) {
-		
+
+		/*
 		int[][] data = MovingAI.loadMap(System.getProperty("user.dir") + "\\" + "brc000d.map");
 		
 		SearchSpace map = QuadTree.create(data, null);
@@ -39,7 +25,7 @@ public class JPSFinderTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		*/
 		
 		
 	}

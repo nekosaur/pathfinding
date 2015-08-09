@@ -20,8 +20,8 @@ public enum NodeState {
 	}
 	
 	static {
-		enumToColor.put(EMPTY, Color.LIGHTGRAY);
-		enumToColor.put(WALL, Color.DARKGRAY);
+		enumToColor.put(EMPTY, Color.WHITESMOKE);
+		enumToColor.put(WALL, Color.rgb(20, 20, 20));
 	}
 
 	NodeState(int value) {

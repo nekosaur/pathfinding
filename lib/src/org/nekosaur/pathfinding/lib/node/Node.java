@@ -8,7 +8,6 @@ public class Node extends Vertex implements Comparable<Node>, Copy<Node> {
 	public Node parent;
 	public double g;
 	public double h;
-	public double f;
 	public NodeState state;
 	public NodeStatus status;
 	
@@ -22,10 +21,16 @@ public class Node extends Vertex implements Comparable<Node>, Copy<Node> {
 		this(x, y);
 		this.state = state;
 	}
+
+	public double getF() {
+		return g + h;
+	}
 		
 	@Override
     public int compareTo(Node node) {
-        if (areEqualDouble(this.f, node.f, 6)) {
+		double f1 = getF();
+		double f2 = node.getF();
+        if (areEqualDouble(f1, f2, 6)) {
             if (areEqualDouble(this.g, node.g, 6))
                 return 0;
             else if (this.g > node.g)
@@ -33,15 +38,15 @@ public class Node extends Vertex implements Comparable<Node>, Copy<Node> {
             else if (this.g < node.g)
                 return 1;
         }
-        else if (this.f < node.f)
+        else if (f1 < f2)
             return -1;
-        else if (this.f > node.f)
+        else if (f1 > f2)
             return 1;
 
         return 0;
     }
 	
-	private static boolean areEqualDouble(double a, double b, int precision) {
+	public static boolean areEqualDouble(double a, double b, int precision) {
         return Math.abs(a - b) <= Math.pow(10, -precision);
     }
 	
@@ -50,7 +55,6 @@ public class Node extends Vertex implements Comparable<Node>, Copy<Node> {
 		copy.parent = parent;
 		copy.g = g;
 		copy.h = h;
-		copy.f = f;
 		copy.state = state;
 		copy.status = status;
 		return copy;
@@ -58,7 +62,7 @@ public class Node extends Vertex implements Comparable<Node>, Copy<Node> {
 	
 	@Override
     public String toString() {
-        return String.format("%s G=%.2f H=%.2f F=%.2f STATE=%s STATUS=%s", super.toString(), g, h, f, state, status);
+        return String.format("%s G=%.2f H=%.2f F=%.2f STATE=%s STATUS=%s", super.toString(), g, h, getF(), state, status);
     }
 	
 }

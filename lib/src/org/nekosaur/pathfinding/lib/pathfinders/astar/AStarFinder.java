@@ -12,6 +12,12 @@ import org.nekosaur.pathfinding.lib.node.Node;
 import org.nekosaur.pathfinding.lib.node.NodeStatus;
 import org.nekosaur.pathfinding.lib.pathfinders.AbstractPathfinder;
 
+/**
+ * http://www.redblobgames.com/pathfinding/a-star/introduction.html
+ * https://en.wikipedia.org/wiki/A*_search_algorithm
+ *
+ * @author nekosaur
+ */
 public class AStarFinder extends AbstractPathfinder {
 
 	@Override
@@ -70,7 +76,6 @@ public class AStarFinder extends AbstractPathfinder {
                     // Set new G and H costs, and parent
                     neighbourNode.g = g;
                     neighbourNode.h = weight * heuristic.calculate(neighbourNode.delta(goalNode));
-                    neighbourNode.f = neighbourNode.g + neighbourNode.h;
                     neighbourNode.parent = currentNode;
                     
                     // Add node to open list if it's not on it already

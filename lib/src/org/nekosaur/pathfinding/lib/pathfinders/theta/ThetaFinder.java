@@ -11,10 +11,8 @@ import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
 import org.nekosaur.pathfinding.lib.interfaces.Heuristic;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.node.Node;
-import org.nekosaur.pathfinding.lib.node.NodeState;
 import org.nekosaur.pathfinding.lib.node.NodeStatus;
 import org.nekosaur.pathfinding.lib.pathfinders.AbstractPathfinder;
-import org.nekosaur.pathfinding.lib.searchspaces.Grid;
 
 /**
  * Theta* pathfinder. 
@@ -88,7 +86,6 @@ public class ThetaFinder extends AbstractPathfinder {
                 // If new G cost is lower than current, update node
                 if (neighbourNode.g < g) {
                     neighbourNode.h = weight * heuristic.calculate(neighbourNode.delta(goalNode));
-                    neighbourNode.f = neighbourNode.g + neighbourNode.h;
 
                     // Add node to open list if it's not on it already
                     if (!isInOpenList) {

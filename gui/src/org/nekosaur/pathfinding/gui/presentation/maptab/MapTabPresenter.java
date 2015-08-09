@@ -12,13 +12,11 @@ import javafx.concurrent.Task;
 import javafx.scene.control.ProgressBar;
 import javafx.application.Platform;
 import org.nekosaur.pathfinding.gui.business.Controller;
-import org.nekosaur.pathfinding.gui.business.events.EditMapLoadEvent;
-import org.nekosaur.pathfinding.gui.business.events.SearchMapLoadEvent;
-import org.nekosaur.pathfinding.gui.presentation.dialogs.ProgressDialog;
-import org.nekosaur.pathfinding.gui.presentation.maps.IEditableMap;
-import org.nekosaur.pathfinding.gui.presentation.maps.ISearchableMap;
-import org.nekosaur.pathfinding.gui.presentation.maps.editable.EditableGridMap;
-import org.nekosaur.pathfinding.gui.presentation.maps.grid.GridMap;
+import org.nekosaur.pathfinding.gui.business.TriFunction;
+import org.nekosaur.pathfinding.gui.business.events.*;
+import org.nekosaur.pathfinding.gui.presentation.maps.editable.IEditableMap;
+import org.nekosaur.pathfinding.gui.presentation.maps.searchable.ISearchableMap;
+import org.nekosaur.pathfinding.lib.common.MapData;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -53,6 +51,12 @@ public class MapTabPresenter implements Initializable {
 
     IEditableMap editMap;
     ISearchableMap searchMap;
+    TriFunction<Double, Double, MapData, IEditableMap> selectedMapType;
+    TriFunction<Double, Double, MapData, ISearchableMap> selectedSearchableMap;
+    int mapSize;
+
+    private static final double MAP_WIDTH = 1024;
+    private static final double MAP_HEIGHT = 1024;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -66,7 +70,42 @@ public class MapTabPresenter implements Initializable {
     }
 
     @Subscribe
+    public void handlePathFoundEvent(PathFoundEvent e) {
+        if (searchMap != null)
+            searchMap.drawPath(e.getPath());
+    }
+
+    @Subscribe
+    public void handleHistoryUpdatedEvent(HistoryUpdatedEvent e) {
+        searchMap.update(e.getNode());
+    }
+
+    @Subscribe
+    public void handleChangeEditableMapTypeEvent(ChangeEditableMapTypeEvent e) {
+        selectedMapType = e.getFunction();
+
+        controller.postEvent(new EditMapLoadEvent(null));
+    }
+
+    @Subscribe
+    public void handleChangeSearchableMapTypeEvent(ChangeSearchableMapTypeEvent e) {
+        selectedSearchableMap = e.getFunction();
+
+        if (tabPane.getSelectionModel().selectedItemProperty().get().equals(searchTab))
+            controller.postEvent(new SearchMapLoadEvent(null));
+    }
+
+    @Subscribe
+    public void handleChangeMapSizeEvent(ChangeMapSizeEvent e) {
+        mapSize = e.getMapSize();
+
+        if (editMap != null)
+            controller.postEvent(new EditMapLoadEvent(new MapData(new int[mapSize][mapSize], null)));
+    }
+
+    @Subscribe
     public void handleEditMapLoadEvent(EditMapLoadEvent e) {
+        MapData data = e.getData() == null ? new MapData(new int[mapSize][mapSize], null) : e.getData();
         if (editMap != null) {
             editPane.getChildren().remove(editMap);
             editMap = null;
@@ -74,22 +113,29 @@ public class MapTabPresenter implements Initializable {
 
         System.out.println("Loading edit map");
 
-        editMap = new EditableGridMap(rootPane.getPrefWidth(), rootPane.getPrefHeight(), e.getData());
-        editPane.getChildren().add((Pane)editMap);
+        editMap = selectedMapType.apply(MAP_WIDTH, MAP_HEIGHT, data);
+        editPane.getChildren().add((Pane) editMap);
+
+        tabPane.getSelectionModel().select(editTab);
         
     }
     
     @Subscribe
     public void handleSearchMapLoadEvent(SearchMapLoadEvent e) {
     	if (searchMap != null) {
-    		if (!editMap.isDirty())
-    			return;
     		searchPane.getChildren().remove(searchMap);
     		searchMap = null;
     	}
-    	
+
     	System.out.println("Loading search map");
-    	Task<ISearchableMap> task = GridMap.create(rootPane.getPrefWidth(), rootPane.getPrefHeight(), e.getData());
+        //GridMap.create(MAP_WIDTH, MAP_HEIGHT, e.getData());
+    	Task<ISearchableMap> task = new Task<ISearchableMap>() {
+
+            @Override
+            protected ISearchableMap call() throws Exception {
+                return selectedSearchableMap.apply(MAP_WIDTH, MAP_HEIGHT, editMap.getData());
+            }
+        };
     	
     	ProgressBar pbar = new ProgressBar();
     	pbar.progressProperty().bind(task.progressProperty());
@@ -101,12 +147,21 @@ public class MapTabPresenter implements Initializable {
     			searchPane.getChildren().remove(pbar);
     			searchMap = task.getValue();
     			searchPane.getChildren().add((Pane)searchMap);
-    			
+
+                System.out.println(searchMap.getStartProperty());
     			controller.getStartProperty().bind(searchMap.getStartProperty());
     			controller.getGoalProperty().bind(searchMap.getGoalProperty());
-    			controller.setSearchSpace(searchMap.getData());
+    			controller.setSearchableMap(searchMap);
     		});
     	});
+
+        task.setOnFailed(event -> {
+            try {
+                throw event.getSource().getException();
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
     	
     	Thread t = new Thread(task);
     	t.start();

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 <AnchorPane id="AnchorPane" maxHeight="1024.0" maxWidth="250.0" minHeight="1024.0" minWidth="250.0" prefHeight="1024.0" prefWidth="250.0" styleClass="airpad" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.nekosaur.pathfinding.gui.presentation.control.ControlPresenter">
    <children>
       <VBox prefHeight="598.0" prefWidth="181.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -15,9 +17,23 @@
                            <children>
                               <HBox>
                                  <children>
-                                    <Label text="Type" />
+                                    <Label text="Type">
+                                       <HBox.margin>
+                                          <Insets top="4.0" />
+                                       </HBox.margin></Label>
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <ChoiceBox fx:id="cboxMapType" prefWidth="100.0" />
+                                    <ChoiceBox fx:id="choiceMapType" prefWidth="100.0" />
+                                 </children>
+                              </HBox>
+                              <HBox prefWidth="200.0">
+                                 <children>
+                                    <Label text="Map Size">
+                                       <HBox.margin>
+                                          <Insets top="4.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <ChoiceBox fx:id="choiceMapSize" prefWidth="100.0" />
                                  </children>
                               </HBox>
                               <HBox spacing="5.0">
@@ -34,15 +50,44 @@
                                  </children>
                               </HBox>
                               <Button fx:id="btnSaveMap" mnemonicParsing="false" onMouseClicked="#handleButtonSaveMapClicked" text="Save Map" />
-                              <HBox prefWidth="200.0">
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </AnchorPane>
+              </content>
+            </TitledPane>
+            <TitledPane animated="false" text="SearchSpace">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="83.0" prefWidth="218.0">
+                     <children>
+                        <VBox prefHeight="83.0" prefWidth="218.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <HBox>
                                  <children>
-                                    <Label text="Map Size">
+                                    <Label text="Type">
                                        <padding>
-                                          <Insets top="3.0" />
+                                          <Insets top="4.0" />
                                        </padding>
                                     </Label>
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <ChoiceBox fx:id="choiceGridSize" prefWidth="90.0" />
+                                    <ChoiceBox fx:id="choiceSearchSpace" prefWidth="100.0" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Allow Diagonal Movement" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <CheckBox fx:id="cboxDiagonalMovement" mnemonicParsing="false" />
+                                 </children>
+                              </HBox>
+                              <HBox>
+                                 <children>
+                                    <Label text="Allow Wall Corner Movement" />
+                                    <Region HBox.hgrow="ALWAYS" />
+                                    <CheckBox fx:id="cboxWallCornerMovement" mnemonicParsing="false" />
                                  </children>
                               </HBox>
                            </children>
@@ -56,7 +101,7 @@
             </TitledPane>
             <TitledPane animated="false" text="Scenario" VBox.vgrow="ALWAYS">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="360.0" prefWidth="200.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="293.0" prefWidth="218.0">
                      <children>
                         <VBox prefHeight="360.0" prefWidth="218.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -91,7 +136,7 @@
             </TitledPane>
             <TitledPane animated="false" text="Pathfinding" VBox.vgrow="ALWAYS">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="218.0">
                      <children>
                         <VBox prefHeight="180.0" prefWidth="218.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
@@ -127,20 +172,6 @@
                                     <Spinner fx:id="spinWeight" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" />
                                  </children>
                               </HBox>
-                              <HBox>
-                                 <children>
-                                    <Label text="Allow Wall Corner Movement" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <CheckBox fx:id="cboxWallCornerMovement" mnemonicParsing="false" />
-                                 </children>
-                              </HBox>
-                              <HBox>
-                                 <children>
-                                    <Label text="Allow Diagonal Movement" />
-                                    <Region HBox.hgrow="ALWAYS" />
-                                    <CheckBox fx:id="cboxDiagonalMovement" mnemonicParsing="false" />
-                                 </children>
-                              </HBox>
                            </children>
                         </VBox>
                      </children>
@@ -152,18 +183,17 @@
             </TitledPane>
             <TitledPane animated="false" text="Control" VBox.vgrow="ALWAYS">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0">
+                <AnchorPane prefHeight="104.0" prefWidth="218.0">
                      <children>
-                        <VBox prefHeight="84.0" prefWidth="218.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <VBox layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="218.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <HBox>
                                  <children>
                                     <Label text="Delay" />
                                     <Region HBox.hgrow="ALWAYS" />
-                                    <Slider fx:id="sliderSpeed" blockIncrement="1.0" majorTickUnit="10.0" max="50.0" maxWidth="175.0" min="1.0" minWidth="175.0" minorTickCount="1" prefWidth="175.0" showTickLabels="true" showTickMarks="true" value="1.0" />
+                                    <Slider fx:id="sliderSpeed" blockIncrement="1.0" majorTickUnit="10.0" max="50.0" maxWidth="150.0" min="1.0" minWidth="150.0" minorTickCount="1" prefWidth="150.0" showTickLabels="true" showTickMarks="true" value="1.0" />
                                  </children>
                               </HBox>
-                              <CheckBox fx:id="checkboxStep" mnemonicParsing="false" text="Step through" />
                               <HBox spacing="5.0">
                                  <children>
                                     <Button fx:id="btnStart" mnemonicParsing="false" onMouseClicked="#handleButtonStartClicked" text="Find" />
@@ -171,6 +201,7 @@
                                     <Button fx:id="btnReset" mnemonicParsing="false" onMouseClicked="#handleButtonResetClicked" text="Reset" />
                                  </children>
                               </HBox>
+                              <CheckBox fx:id="cboxStep" mnemonicParsing="false" text="Step through" />
                            </children>
                         </VBox>
                      </children>
@@ -182,7 +213,7 @@
             </TitledPane>
          </children>
          <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
          </padding>
       </VBox>
    </children>

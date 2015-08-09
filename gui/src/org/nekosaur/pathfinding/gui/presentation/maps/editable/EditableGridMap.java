@@ -2,14 +2,11 @@ package org.nekosaur.pathfinding.gui.presentation.maps.editable;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import org.nekosaur.pathfinding.gui.business.MapData;
-import org.nekosaur.pathfinding.gui.business.exceptions.MapDataIncompleteException;
+import org.nekosaur.pathfinding.lib.common.MapData;
+import org.nekosaur.pathfinding.lib.exceptions.MissingMapDataException;
 import org.nekosaur.pathfinding.gui.presentation.maps.AbstractMap;
-import org.nekosaur.pathfinding.gui.presentation.maps.IEditableMap;
 import org.nekosaur.pathfinding.gui.presentation.maps.MapCanvas;
 import org.nekosaur.pathfinding.lib.node.NodeState;
 
@@ -26,7 +23,7 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
     private int rows;
     private double cellWidth;
     private double cellHeight;
-    private double cellPadding = 1;
+    private double cellPadding = 0;
 
     private int[][] data;
 
@@ -41,7 +38,7 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
         this.canvas = new MapCanvas(width, height);
 
         if (!mapData.getVertices().isPresent())
-        	throw new MapDataIncompleteException("Vertices missing");
+        	throw new MissingMapDataException("Vertices missing");
         
         load(mapData.getVertices().get());
 
@@ -54,7 +51,7 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
             int x = (int)(event.getX() / cellWidth);
             int y = (int)(event.getY() / cellHeight);
 
-            if (x >= columns || y >= rows)
+            if (x < 0 || x >= columns || y < 0 || y >= rows)
                 return;
 
             data[y][x] = data[y][x] == 1 ? 0 : 1;
@@ -69,7 +66,7 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
             int x = (int)(event.getX() / cellWidth);
             int y = (int)(event.getY() / cellHeight);
 
-            if (x >= columns || y >= rows)
+            if (x < 0 || x >= columns || y < 0 || y >= rows)
                 return;
 
             data[y][x] = startValue.get();
@@ -85,12 +82,12 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
     public void load(int[][] data) {
         this.columns = data[0].length;
         this.rows = data.length;
-        double cellSize = Math.min((width - (columns * cellPadding)) / columns, (height - (rows * cellPadding)) / rows);
+        double cellSize = Math.min(width / columns, height / rows);
         this.cellWidth = cellSize;
         this.cellHeight = cellSize;
         
-        System.out.println("width="+width);
-        System.out.println("height="+height);
+        System.out.println("paneWidth="+width);
+        System.out.println("paneHeight="+height);
         System.out.println("cellsize="+cellSize);
 
         for (int y = 0; y < rows; y++) {

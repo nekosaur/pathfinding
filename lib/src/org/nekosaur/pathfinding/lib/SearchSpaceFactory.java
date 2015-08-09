@@ -1,38 +1,24 @@
 package org.nekosaur.pathfinding.lib;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
+import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
-import org.nekosaur.pathfinding.lib.searchspaces.Graph;
-import org.nekosaur.pathfinding.lib.searchspaces.Grid;
-import org.nekosaur.pathfinding.lib.searchspaces.QuadTree;
+import org.nekosaur.pathfinding.lib.searchspaces.grid.Grid;
 
 public class SearchSpaceFactory {
 
 	private SearchSpaceFactory() {};
 	
-	public static SearchSpace create(Class<SearchSpace> clazz) {
-		try {
-            return (SearchSpace)clazz.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-		
-		return null;
-	}
-	
-	public static Map<String, Class<? extends SearchSpace>> getAvailableClasses() {
-		
-		Map<String, Class<? extends SearchSpace>> map = new HashMap<>();
-		
-		map.put("Graph", Graph.class);
-		map.put("Grid", Grid.class);
-		map.put("QuadTree", QuadTree.class);
-		
+	public static Map<String, Function<MapData, SearchSpace>> getSearchSpaces() {
+		Map<String, Function<MapData, SearchSpace>> map = new LinkedHashMap<>();
+
+		map.put("Grid", Grid::create);
+		//map.put("Graph", Graph::create);
+		//map.put("QuadTree", QuadTree::create);
+
 		return map;
-		
 	}
 }

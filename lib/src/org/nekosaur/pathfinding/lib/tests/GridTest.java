@@ -1,8 +1,7 @@
 package org.nekosaur.pathfinding.lib.tests;
 
-import java.util.concurrent.TimeUnit;
-
 import org.nekosaur.pathfinding.lib.common.Heuristics;
+import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.lib.common.Result;
 import org.nekosaur.pathfinding.lib.common.Vertex;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
@@ -11,8 +10,7 @@ import org.nekosaur.pathfinding.lib.interfaces.Pathfinder;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.movingai.MovingAI;
 import org.nekosaur.pathfinding.lib.pathfinders.astar.AStarFinder;
-import org.nekosaur.pathfinding.lib.searchspaces.Grid;
-import org.nekosaur.pathfinding.lib.searchspaces.QuadTree;
+import org.nekosaur.pathfinding.lib.searchspaces.grid.Grid;
 
 public class GridTest {
 	
@@ -20,7 +18,7 @@ public class GridTest {
 		
 		int[][] data = MovingAI.loadMap(System.getProperty("user.dir") + "\\" + "brc000d.map");
 		
-		SearchSpace map = Grid.create(data, null);
+		SearchSpace map = Grid.create(new MapData(data, null));
 		
 		Pathfinder f = new AStarFinder();
 		

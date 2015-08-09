@@ -12,16 +12,13 @@ public class BinaryHashHeapTest {
 		Node n1 = new Node(1, 0);
 		n1.g = 1;
 		n1.h = 9.2;
-		n1.f = n1.g + n1.h;
 		Node n2 = new Node(0, 1);
 		n2.g = 1;
 		n2.h = 9.2;
-		n2.f = n2.g + n2.h;
 		Node n3 = new Node(1, 1);
 		n3.g = 1;
 		n3.h = 8.2;
-		n3.f = n3.g + n3.h;
-		
+
 		heap.add(n1);
 		heap.add(n2);
 		heap.add(n3);

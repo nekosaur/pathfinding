@@ -48,7 +48,7 @@ public class MainPresenter implements Initializable {
     }
 
     public void shutdown() {
-        //controller.shutdown();
+        controller.shutdown();
     }
 
 }

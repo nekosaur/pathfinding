@@ -1,6 +1,6 @@
 package org.nekosaur.pathfinding.gui.business.events;
 
-import org.nekosaur.pathfinding.gui.business.MapData;
+import org.nekosaur.pathfinding.lib.common.MapData;
 
 /**
  * @author nekosaur
