@@ -15,7 +15,7 @@ trying for a refactor of pfsandbox
 - go through all and optimize where possible
 
 ## searchspaces
-- implement more. look at edges graphs, nav meshes?
+- implement more. look at corner graphs, nav meshes?
 
 ## thoughts
 - probably not viable, but having map and vertex be completely immutable, pathfinders keep track of local variables by themselves, use functional interfaces?
