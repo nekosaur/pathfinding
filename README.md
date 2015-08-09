@@ -1,6 +1,6 @@
 # pathfinding
 
-Trying for a refactor of pfsandbox
+trying for a refactor of pfsandbox
 
 ## dependencies
  - com.airhacks:afterburner-topgun
@@ -8,5 +8,12 @@ Trying for a refactor of pfsandbox
  - com.google.guava:guava
  - it.unimi.dsi:fastutil
 
+## pathfinders
+
+- ported most of the pathfinders from pfsandbox
+- fringe search needs to be checked
+- go through all and optimize where possible
+
 ## thoughts
-- Probably not viable, but having map and vertex be completely immutable, pathfinders keep track of local variables by themselves, use functional interfaces?
+- probably not viable, but having map and vertex be completely immutable, pathfinders keep track of local variables by themselves, use functional interfaces?
+- how to handle pathfinder specific rendering needs, such as jps peeked nodes, and hpa abstracted graphs?
