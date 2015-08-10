@@ -66,6 +66,7 @@ public abstract class AbstractSearchableMap extends Pane implements ISearchableM
 	@Override
     public void reset() {
         searchSpace = searchSpace.copy();
+        canvas.reset();
         canvas.drawImage(searchSpace.draw((int) paneWidth));
         update(searchSpace.getNode(start.get().x, start.get().y));
         update(searchSpace.getNode(goal.get().x, goal.get().y));
