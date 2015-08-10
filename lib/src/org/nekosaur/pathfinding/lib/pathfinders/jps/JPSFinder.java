@@ -22,7 +22,7 @@ import org.nekosaur.pathfinding.lib.searchspaces.grid.Grid;
 public class JPSFinder extends AbstractPathfinder {
 	
 	private PriorityQueue<Node> jumpList = new PriorityQueue<>();
-    private ArrayList<Node> closedList = new ArrayList<>();
+    //private ArrayList<Node> closedList = new ArrayList<>();
     
     private SearchSpace map;
     private double weight;
@@ -46,7 +46,7 @@ public class JPSFinder extends AbstractPathfinder {
 			throw new NodeNotFoundException("Start or Goal node not found in SearchSpace");
 
         jumpList.clear();
-        closedList.clear();
+        //closedList.clear();
         
         startClock();
 
@@ -61,11 +61,12 @@ public class JPSFinder extends AbstractPathfinder {
             Node currentNode = jumpList.remove();
 
             if (currentNode == goalNode) {
-                return new Result(reconstructPath(currentNode), stopClock(), operations);
+                return new Result(reconstructPath(currentNode), currentNode.g, stopClock(), operations);
             }
 
             currentNode.status = NodeStatus.CLOSED;
-            closedList.add(currentNode);
+            addToHistory(currentNode);
+            //closedList.add(currentNode);
 
             identifySuccessors(currentNode, startNode, goalNode);
 
@@ -85,16 +86,14 @@ public class JPSFinder extends AbstractPathfinder {
 
             if (neighbourNode == null)
                 continue;
-
+            
             Node jumpNode = jump(currentNode, getDirection(currentNode, neighbourNode), goalNode);
 
-            if (jumpNode == null || closedList.contains(jumpNode))
+            if (jumpNode == null || jumpNode.status == NodeStatus.CLOSED)
                 continue;
 
-            jumpNode.status = NodeStatus.JUMPED;
-
             // include heuristic distance, as parent might not be immediately adjacent
-            double d = Heuristics.octile.calculate(neighbourNode.delta(jumpNode));
+            double d = Heuristics.octile.calculate(currentNode.delta(jumpNode));
             double g = currentNode.g + d;
 
             if (!jumpList.contains(jumpNode) || g < jumpNode.g) {
@@ -105,6 +104,7 @@ public class JPSFinder extends AbstractPathfinder {
 
                 if (!jumpList.contains(jumpNode)) {
                     jumpList.add(jumpNode);
+                    jumpNode.status = NodeStatus.JUMPED;
                 } else {
                     // Since scores has been recalculated, we remove node from openlist and add it again
                     jumpList.remove(jumpNode);
@@ -235,7 +235,11 @@ public class JPSFinder extends AbstractPathfinder {
 
         if (node == goalNode)
             return node;
+        
+        if (node.status == NodeStatus.CLOSED || node.status == NodeStatus.JUMPED)
+        	return null;
 
+        node.parent = initialNode;
         node.status = NodeStatus.PEEKED;
         addToHistory(node);
 
@@ -243,7 +247,6 @@ public class JPSFinder extends AbstractPathfinder {
         int y = node.y;
         int dx = direction.x;
         int dy = direction.y;
-
         
         // Horizontal
         if (dy == 0) {
@@ -273,6 +276,9 @@ public class JPSFinder extends AbstractPathfinder {
                 if ((!map.isWalkableAt(x - dx, y) && map.isWalkableAt(x - dx, y + dy))
                         || (!map.isWalkableAt(x, y - dy) && map.isWalkableAt(x + dx, y - dy)))
                     return node;
+            } else {
+            	if (!map.isWalkableAt(x - dx,  y) && !map.isWalkableAt(x, y - dy))
+            		return null;
             }
 
             // ... then jump horizontally and vertically from diagonal position

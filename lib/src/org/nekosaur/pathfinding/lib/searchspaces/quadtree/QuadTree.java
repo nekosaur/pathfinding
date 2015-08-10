@@ -17,6 +17,7 @@ import org.nekosaur.pathfinding.lib.node.NodeState;
 import javafx.scene.image.WritableImage;
 import org.nekosaur.pathfinding.lib.searchspaces.AbstractSearchSpace;
 
+@SuppressWarnings("restriction")
 public class QuadTree extends AbstractSearchSpace {
 	
 	private QuadNode root = null;

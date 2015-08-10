@@ -1,6 +1,5 @@
 package org.nekosaur.pathfinding.lib.pathfinders.dfs;
 
-import org.nekosaur.pathfinding.lib.common.Heuristics;
 import org.nekosaur.pathfinding.lib.common.Result;
 import org.nekosaur.pathfinding.lib.common.Vertex;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;

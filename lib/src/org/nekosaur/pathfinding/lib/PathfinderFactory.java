@@ -13,6 +13,7 @@ import org.nekosaur.pathfinding.lib.pathfinders.dijkstra.DijkstraFinder;
 import org.nekosaur.pathfinding.lib.pathfinders.fringe.FringeFinder;
 import org.nekosaur.pathfinding.lib.pathfinders.ida.IDAFinder;
 import org.nekosaur.pathfinding.lib.pathfinders.iddfs.IDDFSFinder;
+import org.nekosaur.pathfinding.lib.pathfinders.jps.JPSFinder;
 import org.nekosaur.pathfinding.lib.pathfinders.theta.LazyThetaFinder;
 import org.nekosaur.pathfinding.lib.pathfinders.theta.ThetaFinder;
 
@@ -30,6 +31,7 @@ public class PathfinderFactory {
 		map.put("Fringe", FringeFinder::new);
 		map.put("IDA*", IDAFinder::new);
 		map.put("IDDFS", IDDFSFinder::new);
+		map.put("JPS", JPSFinder::new);
 		map.put("Theta*", ThetaFinder::new);
 		map.put("Lazy Theta*", LazyThetaFinder::new);
 

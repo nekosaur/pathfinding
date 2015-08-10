@@ -62,7 +62,7 @@ public class Node extends Vertex implements Comparable<Node>, Copy<Node> {
 	
 	@Override
     public String toString() {
-        return String.format("%s G=%.2f H=%.2f F=%.2f STATE=%s STATUS=%s", super.toString(), g, h, getF(), state, status);
+        return String.format("%s G=%.2f H=%.2f F=%.2f STATE=%s STATUS=%s PARENT={x=%d,y=%d}", super.toString(), g, h, getF(), state, status, parent != null ? parent.x : -1, parent != null ? parent.y : -1);
     }
 	
 }

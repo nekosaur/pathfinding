@@ -17,6 +17,7 @@ import org.nekosaur.pathfinding.lib.node.NodeState;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.nekosaur.pathfinding.lib.searchspaces.AbstractSearchSpace;
 
+@SuppressWarnings("restriction")
 public class Graph extends AbstractSearchSpace {
 	
 	private final SecureRandom rand = new SecureRandom();

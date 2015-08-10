@@ -19,6 +19,7 @@ import org.nekosaur.pathfinding.lib.node.Node;
 import org.nekosaur.pathfinding.lib.node.NodeState;
 import org.nekosaur.pathfinding.lib.searchspaces.AbstractSearchSpace;
 
+@SuppressWarnings("restriction")
 public class Grid extends AbstractSearchSpace {
 
 	private final SecureRandom rand = new SecureRandom();

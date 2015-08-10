@@ -58,7 +58,7 @@ public class Vertex /*implements Comparable<Vertex>*/ {
 
     @Override
     public String toString() {
-        return String.format("{x=%d, y=%d}", x, y);
+        return String.format("{x=%d,y=%d}", x, y);
     }
 
 	public int compareTo(Node node) {

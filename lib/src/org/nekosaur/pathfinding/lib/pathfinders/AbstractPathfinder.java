@@ -1,7 +1,6 @@
 package org.nekosaur.pathfinding.lib.pathfinders;
 
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
 import org.nekosaur.pathfinding.lib.common.Buffer;

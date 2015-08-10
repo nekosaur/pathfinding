@@ -7,9 +7,9 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import org.nekosaur.pathfinding.lib.common.Option;
-import org.nekosaur.pathfinding.lib.interfaces.Copy;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 
+@SuppressWarnings("restriction")
 public abstract class AbstractSearchSpace implements SearchSpace {
 	
 	protected final int width;

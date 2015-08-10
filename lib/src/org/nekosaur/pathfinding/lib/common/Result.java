@@ -1,7 +1,6 @@
 package org.nekosaur.pathfinding.lib.common;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Result {
     private final List<Vertex> path;
