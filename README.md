@@ -16,6 +16,7 @@ trying for a refactor of pfsandbox
 
 ## searchspaces
 - implement more. look at corner graphs, nav meshes?
+- quadtree does not currently permit traveling diagonally between equal sizes nodes
 
 ## thoughts
 - probably not viable, but having map and vertex be completely immutable, pathfinders keep track of local variables by themselves, use functional interfaces?
