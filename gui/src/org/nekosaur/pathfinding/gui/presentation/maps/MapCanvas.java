@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.transform.Rotate;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.nekosaur.pathfinding.lib.common.Vertex;
@@ -15,9 +16,11 @@ import java.util.List;
 /**
  * @author nekosaur
  */
+@SuppressWarnings("restriction")
 public class MapCanvas extends Canvas {
 
-    private final GraphicsContext gc;
+    
+	private final GraphicsContext gc;
 
     public MapCanvas(double width, double height) {
         super(width, height);
@@ -54,6 +57,24 @@ public class MapCanvas extends Canvas {
             Vertex goal = path.get(i);
             drawLine(start, goal, color, width, dashed);
         }
+    }
+    
+    public void drawTriangle(Vertex position, double length, double angle, Color color) {
+    	gc.save();
+    	
+    	double[] center = new double[] {position.x, position.y};
+    	
+    	Rotate rotate = new Rotate(angle, center[0], center[1]);
+    	gc.transform(rotate.getMxx(), rotate.getMyx(), rotate.getMxy(), rotate.getMyy(), rotate.getTx(), rotate.getTy());
+    	
+    	gc.setFill(color);
+    	
+    	double[] xPoints = new double[] {center[0], center[0] + length/2, center[0] - length/2};
+    	double[] yPoints = new double[] {center[1] - length /2, center[1] + length/2, center[1] + length/2};
+    	
+    	gc.fillPolygon(xPoints, yPoints, 3);
+    	
+    	gc.restore();
     }
 
     private double snap(double v) {

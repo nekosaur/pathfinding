@@ -3,10 +3,13 @@ package org.nekosaur.pathfinding.gui.business;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.concurrent.Task;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 import com.google.common.eventbus.EventBus;
 import org.nekosaur.pathfinding.gui.business.events.HistoryUpdatedEvent;
 import org.nekosaur.pathfinding.gui.business.events.PathFoundEvent;
+import org.nekosaur.pathfinding.gui.presentation.maps.decorators.DecoratorFactory;
 import org.nekosaur.pathfinding.gui.presentation.maps.searchable.ISearchableMap;
 import org.nekosaur.pathfinding.lib.PathfinderFactory;
 import org.nekosaur.pathfinding.lib.SearchSpaceFactory;
@@ -148,6 +151,8 @@ public class Controller {
         searchSpace.allow(options);
 
         pathfinder = pathfinders.get(selectedPathfinder).get();
+        
+        searchableMap.setMapDecorator(DecoratorFactory.getDecorator(pathfinder.getClass()));
     	
     	heuristic = heuristics.get(selectedHeuristic);
     	    	
@@ -178,7 +183,11 @@ public class Controller {
         task.setOnFailed(event -> {
             isRunning.set(false);
             try {
-                throw event.getSource().getException();
+            	Alert alert = new Alert(AlertType.ERROR);
+            	alert.setTitle("Error Message");
+            	alert.setContentText(event.getSource().getException().getMessage());
+            	alert.showAndWait();
+                //throw event.getSource().getException();
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }
@@ -230,6 +239,9 @@ public class Controller {
         public void run() {
             synchronized (this) {
                 try {
+                	if (history.size() == 0)
+                		return;
+                	
                     while(history.size() > 0) {
                         while (isStepping.get() && isPaused) {
                             wait();
@@ -248,10 +260,12 @@ public class Controller {
 
                     }
 
-                    Platform.runLater(() -> {
-                        postEvent(new PathFoundEvent(task.getValue().path()));
-                        isRunning.set(false);
-                    });
+                    if (isRunning.get()) {
+	                    Platform.runLater(() -> {
+	                        postEvent(new PathFoundEvent(task.getValue().path()));
+	                        isRunning.set(false);
+	                    });
+                    }
 
                 } catch (InterruptedException e) {
                     e.printStackTrace();

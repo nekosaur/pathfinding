@@ -3,13 +3,20 @@ package org.nekosaur.pathfinding.gui.presentation.maps;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.layout.Pane;
+
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
+import org.nekosaur.pathfinding.gui.business.TriConsumer;
 import org.nekosaur.pathfinding.gui.presentation.maps.searchable.ISearchableMap;
 import org.nekosaur.pathfinding.lib.common.Vertex;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
+import org.nekosaur.pathfinding.lib.node.Node;
 
 /**
  * @author nekosaur
  */
+@SuppressWarnings("restriction")
 public abstract class AbstractSearchableMap extends Pane implements ISearchableMap {
 
     protected MapCanvas canvas;
@@ -19,6 +26,8 @@ public abstract class AbstractSearchableMap extends Pane implements ISearchableM
     protected double lineWidth;
 
     protected SearchSpace searchSpace;
+    
+    protected TriConsumer<SearchSpace, MapCanvas, Node> mapDecorator;
 
     protected final ObjectProperty<Vertex> start = new SimpleObjectProperty<>();
     protected final ObjectProperty<Vertex> goal = new SimpleObjectProperty<>();
@@ -34,12 +43,10 @@ public abstract class AbstractSearchableMap extends Pane implements ISearchableM
         this.getChildren().add(canvas);
     }
 
-    @SuppressWarnings("unchecked")
     public ObjectProperty<Vertex> getStartProperty() {
         return start;
     }
 
-    @SuppressWarnings("unchecked")
     public ObjectProperty<Vertex> getGoalProperty() {
         return goal;
     }
@@ -48,8 +55,15 @@ public abstract class AbstractSearchableMap extends Pane implements ISearchableM
     public SearchSpace getSearchSpace() {
         return searchSpace;
     }
+    
+    
 
     @Override
+	public void setMapDecorator(TriConsumer<SearchSpace, MapCanvas, Node> decorator) {
+		mapDecorator = decorator;
+	}
+
+	@Override
     public void reset() {
         searchSpace = searchSpace.copy();
         canvas.drawImage(searchSpace.draw((int) paneWidth));

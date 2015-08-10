@@ -1,6 +1,7 @@
 package org.nekosaur.pathfinding.gui.presentation.control;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -161,7 +162,8 @@ public class ControlPresenter implements Initializable {
         cboxStep.selectedProperty().bindBidirectional(controller.isSteppingProperty());
         sliderSpeed.valueProperty().bindBidirectional(controller.speedDelayProperty());
         btnStep.disableProperty().bind(Bindings.not(controller.isSteppingProperty()).or(Bindings.not(controller.isRunningProperty())));
-        btnStart.disableProperty().bind(controller.isRunningProperty());
+        BooleanBinding startOrGoalIsNull = Bindings.or(Bindings.isNull(controller.getStartProperty()), Bindings.isNull(controller.getGoalProperty()));
+        btnStart.disableProperty().bind(startOrGoalIsNull.or(controller.isRunningProperty()));
 
         choiceMapSize.getSelectionModel().select(0);
         choiceMapType.getSelectionModel().select(0);

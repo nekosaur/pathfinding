@@ -2,11 +2,12 @@ package org.nekosaur.pathfinding.gui.presentation.maps.searchable;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.Tooltip;
 
 import org.nekosaur.pathfinding.gui.presentation.maps.AbstractSearchableMap;
 import org.nekosaur.pathfinding.lib.common.MapData;
-import org.nekosaur.pathfinding.gui.presentation.maps.MapCanvas;
-
 import org.nekosaur.pathfinding.lib.common.Vertex;
 import org.nekosaur.pathfinding.lib.node.Node;
 import org.nekosaur.pathfinding.lib.node.NodeState;
@@ -79,6 +80,34 @@ public class GridMap extends AbstractSearchableMap {
             }
 
         });
+        
+        final ObjectProperty<Node> mouseOverNode = new SimpleObjectProperty<>();
+        final Tooltip t = new Tooltip("ASD");
+        
+        canvas.addEventFilter(MouseEvent.MOUSE_MOVED, event -> {
+        	int x = (int)(event.getX() / cellWidth);
+            int y = (int)(event.getY() / cellHeight);
+        	
+        	if (x < 0 || x > searchSpace.getWidth() || y < 0 || y > searchSpace.getHeight())
+        		return;
+        	
+        	Node node = searchSpace.getNode(x, y);
+        	
+        	if (node.equals(mouseOverNode.get())) {
+        		t.setX(event.getX());
+        		t.setY(event.getY());
+        		return;
+        	}
+        	        	
+        	mouseOverNode.set(node);
+        	        	
+        	t.setText(node.toString().replace(' ', '\n'));
+        	t.show(canvas, event.getX(), event.getY());
+        });
+        
+        canvas.addEventFilter(MouseEvent.MOUSE_EXITED, event -> {
+        	t.hide();
+        });
 
     }
 
@@ -106,6 +135,9 @@ public class GridMap extends AbstractSearchableMap {
 			c = Color.LIMEGREEN;
 
 		canvas.drawRect(node.x * cellWidth, node.y * cellHeight, cellWidth, cellHeight, c);
+		
+		if (mapDecorator != null)
+			mapDecorator.accept(searchSpace, canvas, node);
 	}
 
 }

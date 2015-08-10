@@ -18,6 +18,7 @@ import java.util.Random;
 /**
  * @author nekosaur
  */
+@SuppressWarnings("restriction")
 public class QuadTreeMap extends AbstractSearchableMap {
 
     private final Random rand = new Random();
@@ -26,8 +27,8 @@ public class QuadTreeMap extends AbstractSearchableMap {
 
     private Vertex trueStart;
     private Vertex trueGoal;
-
-    public QuadTreeMap(double width, double height, MapData data) {
+    
+	public QuadTreeMap(double width, double height, MapData data) {
         super(width, height);
 
         this.searchSpace = QuadTree.create(data, null);
