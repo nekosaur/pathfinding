@@ -18,6 +18,9 @@ trying for a refactor of pfsandbox
 - implement more. look at corner graphs, nav meshes?
 - quadtree does not currently permit traveling diagonally between equal sizes nodes
 
+## datastructures
+- HOT queues?
+
 ## thoughts
 - probably not viable, but having map and vertex be completely immutable, pathfinders keep track of local variables by themselves, use functional interfaces?
 - how to handle pathfinder specific rendering needs, such as jps peeked nodes, and hpa abstracted graphs?
