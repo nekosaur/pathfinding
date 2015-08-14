@@ -127,6 +127,7 @@ public class BinaryHashHeap<T extends Comparable<T>> implements Queue<T> {
 		//System.out.println("Removed " + item + " from the heap");
 		
 		heap[1] = heap[heapCount];
+		hash.put(heap[1], 1);
 		
 		sortDown();
 		
