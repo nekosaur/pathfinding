@@ -24,6 +24,7 @@ public class VisvalingamWhyatt {
 			Point point = new Point(list.get(i).x, list.get(i).y);
 			points.add(point);
 			
+			// This is not part of proper algorithm, own attempt to prettify hull
 			if (w == null)
 				w = point;
 			else
@@ -61,6 +62,7 @@ public class VisvalingamWhyatt {
 			point = heap.remove();
 			if (point.area > minArea)
 				continue;
+			// Continuation of attempt to prettify hull
 			if (point.equals(n) || point.equals(w) || point.equals(e) || point.equals(s))
 				continue;
 			//Point smallestPoint = heap.remove();

@@ -16,6 +16,7 @@ import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.lib.common.Vertex;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.searchspaces.grid.Grid;
+import org.nekosaur.pathfinding.lib.searchspaces.navmesh.Delaunay;
 import org.nekosaur.pathfinding.lib.searchspaces.navmesh.DouglasPeucker;
 import org.nekosaur.pathfinding.lib.searchspaces.navmesh.MarchingSquares;
 import org.nekosaur.pathfinding.lib.searchspaces.navmesh.VisvalingamWhyatt;
@@ -55,7 +56,7 @@ public class NavMeshTest {
 				{0, 0, 0, 0, 0, 0, 0, 0},
 				{0, 0, 0, 0, 0, 0, 0, 0},
 				{0, 0, 1, 1, 1, 1, 0, 0},
-				{0, 0, 1, 1, 1, 1, 1, 1},
+				{0, 0, 1, 1, 1, 1, 1, 0},
 				{0, 1, 1, 1, 1, 0, 0, 0},
 				{1, 1, 1, 0, 1, 1, 0, 0},
 				{0, 0, 0, 0, 1, 1, 1, 1},
@@ -127,6 +128,7 @@ public class NavMeshTest {
 		
 		List<Vertex> r = VisvalingamWhyatt.reduce(l, (l.size()/3)*2);
 		System.out.println(r.size());
+		System.out.println(r);
 		
 		g2d.setColor(Color.CYAN);
 		
@@ -140,6 +142,11 @@ public class NavMeshTest {
 			g2d.drawLine(start.x * cellSize, start.y * cellSize, v.x * cellSize, v.y * cellSize);
 			start = v;
 		}
+		
+		// Remove previously added duplicate vertex, we don't want it when triangulating
+		r.remove(0);
+		
+		Delaunay.triangulate(r);
 		
 		/*
 		start = null;

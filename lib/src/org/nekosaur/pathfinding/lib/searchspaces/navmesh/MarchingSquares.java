@@ -115,6 +115,7 @@ public class MarchingSquares {
 			
 		} while (x != startx || y != starty);
 		
+		// We add the start vertex again to close the loop
 		perimeter.add(new Vertex(startx + 1, starty + 1));
 		
 		return perimeter;
