@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,10 +15,11 @@ import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.lib.common.Vertex;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.searchspaces.grid.Grid;
-import org.nekosaur.pathfinding.lib.searchspaces.navmesh.Delaunay;
 import org.nekosaur.pathfinding.lib.searchspaces.navmesh.DouglasPeucker;
 import org.nekosaur.pathfinding.lib.searchspaces.navmesh.MarchingSquares;
+import org.nekosaur.pathfinding.lib.searchspaces.navmesh.Triangulation;
 import org.nekosaur.pathfinding.lib.searchspaces.navmesh.VisvalingamWhyatt;
+import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
 
 import javafx.scene.image.Image;
 import javafx.embed.swing.*;
@@ -56,10 +56,10 @@ public class NavMeshTest {
 				{0, 0, 0, 0, 0, 0, 0, 0},
 				{0, 0, 0, 0, 0, 0, 0, 0},
 				{0, 0, 1, 1, 1, 1, 0, 0},
-				{0, 0, 1, 1, 1, 1, 1, 0},
+				{0, 0, 1, 1, 1, 1, 0, 0},
 				{0, 1, 1, 1, 1, 0, 0, 0},
-				{1, 1, 1, 0, 1, 1, 0, 0},
-				{0, 0, 0, 0, 1, 1, 1, 1},
+				{0, 1, 1, 0, 1, 1, 0, 0},
+				{0, 0, 0, 0, 1, 1, 1, 0},
 				{0, 0, 0, 0, 0, 0, 0, 0}
 		};
 		
@@ -88,7 +88,7 @@ public class NavMeshTest {
 		
 		SearchSpace grid = Grid.create(new MapData(data, null));
 		
-		int imageSize = 1024;
+		int imageSize = 512;
 
 		Image gridImage = grid.draw(imageSize);
 		
@@ -98,7 +98,7 @@ public class NavMeshTest {
 		
 		MarchingSquares ms = new MarchingSquares(data);
 		
-		int cellSize = 1024 / data.length; 
+		int cellSize = imageSize / data.length; 
 		
 		g2d.setStroke(new BasicStroke(5));
 		g2d.setColor(Color.PINK);
@@ -106,7 +106,7 @@ public class NavMeshTest {
 		Vertex start = null;
 		for (Vertex v : l) {
 			
-			g2d.drawOval(v.x * cellSize, v.y * cellSize, 10, 10);
+			g2d.drawOval(v.x * cellSize - 5, v.y * cellSize - 5, 10, 10);
 			
 			if (start == null) {
 				start = v;
@@ -146,7 +146,25 @@ public class NavMeshTest {
 		// Remove previously added duplicate vertex, we don't want it when triangulating
 		r.remove(0);
 		
-		Delaunay.triangulate(r);
+		//Delaunay.triangulate(r);
+		//Triangulation.triangulate(r);
+		List<DelaunayTriangle> triangles = Triangulation.test(r);
+		
+		g2d.setColor(Color.RED);
+		
+		for (DelaunayTriangle t : triangles) {
+			int x1 = (int)t.points[0].getX();
+			int y1 = (int)t.points[0].getY();
+			int x2 = (int)t.points[1].getX();
+			int y2 = (int)t.points[1].getY();
+			int x3 = (int)t.points[2].getX();
+			int y3 = (int)t.points[2].getY();
+			System.out.println(t.points[0] + ", " + t.points[1] + ", " + t.points[2]);
+			g2d.drawLine(x1 * cellSize, y1 * cellSize, x2 * cellSize, y2 * cellSize);
+			g2d.drawLine(x2 * cellSize, y2 * cellSize, x3 * cellSize, y3 * cellSize);
+			g2d.drawLine(x3 * cellSize, y3 * cellSize, x1 * cellSize, y1 * cellSize);
+		}
+		
 		
 		/*
 		start = null;

@@ -48,6 +48,11 @@ limitations under the License.
 			<artifactId>fastutil</artifactId>
 			<version>7.0.6</version>
 		</dependency>
+		<dependency>
+			<groupId>org.orbisgis</groupId>
+			<artifactId>poly2tri-core</artifactId>
+			<version>0.1.2</version>
+		</dependency>
     </dependencies>
     <build>
         <defaultGoal>clean package</defaultGoal>
