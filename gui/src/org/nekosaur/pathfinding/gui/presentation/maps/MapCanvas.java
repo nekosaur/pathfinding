@@ -98,6 +98,15 @@ public class MapCanvas extends Pane {
         gcTop.restore();
     }
 
+    public void drawTriangle(double[] xPoints, double[] yPoints, Color color) {
+        gcTop.save();
+        gcTop.setFill(color);
+
+        gcTop.fillPolygon(xPoints, yPoints, 3);
+
+        gcTop.restore();
+    }
+
     private double snap(double v) {
         return snap(v, 0f);
     }

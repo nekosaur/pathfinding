@@ -15,7 +15,7 @@ public class NavMeshTestNew {
 	
 	public static void main(String[] args) {
 
-
+		/*
 		int data[][] = {
 				{0,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0},
@@ -27,6 +27,18 @@ public class NavMeshTestNew {
 				{0,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0},
+		};
+		*/
+
+		int[][] data = {
+				{0,0,0,0,0,0,0,0},
+				{0,1,1,0,0,0,0,0},
+				{0,1,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0}
 		};
 
 
@@ -54,6 +66,8 @@ public class NavMeshTestNew {
 		NavMesh navMesh = new NavMesh(10, 10);
 		
 		SearchSpace ss = NavMesh.create(new MapData(data, null));
+
+		System.out.println(ss.getNode(0, 1));
 
 		int imageSize = 512;
 		Image gridImage = ss.draw(imageSize);

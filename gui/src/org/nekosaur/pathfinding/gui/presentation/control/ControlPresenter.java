@@ -16,14 +16,12 @@ import org.nekosaur.pathfinding.gui.business.events.ChangeSearchableMapTypeEvent
 import org.nekosaur.pathfinding.gui.presentation.maps.editable.EditableGraphMap;
 import org.nekosaur.pathfinding.gui.presentation.maps.editable.IEditableMap;
 import org.nekosaur.pathfinding.gui.presentation.maps.editable.EditableGridMap;
-import org.nekosaur.pathfinding.gui.presentation.maps.searchable.GraphMap;
-import org.nekosaur.pathfinding.gui.presentation.maps.searchable.GridMap;
-import org.nekosaur.pathfinding.gui.presentation.maps.searchable.ISearchableMap;
-import org.nekosaur.pathfinding.gui.presentation.maps.searchable.QuadTreeMap;
+import org.nekosaur.pathfinding.gui.presentation.maps.searchable.*;
 import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.gui.business.events.EditMapLoadEvent;
 import org.nekosaur.pathfinding.lib.common.Option;
 import org.nekosaur.pathfinding.lib.movingai.MovingAI;
+import org.nekosaur.pathfinding.lib.searchspaces.navmesh.NavMesh;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -115,6 +113,7 @@ public class ControlPresenter implements Initializable {
         searchableMaps.put("Grid", GridMap::new);
         searchableMaps.put("QuadTree", QuadTreeMap::new);
         searchableMaps.put("Graph", GraphMap::new);
+        searchableMaps.put("NavMesh", NavMeshMap::new);
 
         choiceMapType.getItems().addAll(editableMaps.keySet());
         choiceMapType.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {

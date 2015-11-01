@@ -23,6 +23,7 @@ import org.nekosaur.pathfinding.lib.searchspaces.AbstractSearchSpace;
 import org.nekosaur.pathfinding.lib.searchspaces.grid.Grid;
 
 import javafx.scene.image.Image;
+import org.poly2tri.triangulation.TriangulationPoint;
 import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
 import org.poly2tri.triangulation.point.TPoint;
 
@@ -88,8 +89,10 @@ public class NavMesh extends AbstractSearchSpace {
 		for (DelaunayTriangle dt : triangles) {
 			List<Node> adjacentTriangles = triangleAdjacencyMap.get(delaunayMap.get(dt));
 
-			for (DelaunayTriangle n : dt.neighbors) {
-				adjacentTriangles.add(delaunayMap.get(n));
+			for (DelaunayTriangle nt : dt.neighbors) {
+				Node n = delaunayMap.get(nt);
+				if (n != null)
+					adjacentTriangles.add(n);
 			}
 		}
 	}
@@ -110,10 +113,31 @@ public class NavMesh extends AbstractSearchSpace {
 	public Node getNode(int x, int y) {
 		for (Map.Entry<DelaunayTriangle, Triangle> e : delaunayMap.entrySet()) {
 			DelaunayTriangle dt = e.getKey();
-			if (dt.contains(new TPoint(x, y)))
+			if (pointInTriangle(dt.points, x, y))
 				return e.getValue();
 		}
 		return null;
+	}
+
+	public DelaunayTriangle getTriangle(int x, int y) {
+		for (Map.Entry<DelaunayTriangle, Triangle> e : delaunayMap.entrySet()) {
+			if ((new Vertex(x, y)).equals((Vertex)e.getValue()))
+				return e.getKey();
+		}
+		return null;
+	}
+
+	public DelaunayTriangle getTriangle(Node n) {
+		return getTriangle(n.x, n.y);
+	}
+
+	private boolean pointInTriangle(TriangulationPoint[] points, int x, int y) {
+		double denominator = ((points[1].getY() - points[2].getY())*(points[0].getX() - points[2].getX()) + (points[2].getX() - points[1].getX())*(points[0].getY() - points[2].getY()));
+		double a = ((points[1].getY() - points[2].getY())*(x - points[2].getX()) + (points[2].getX() - points[1].getX())*(y - points[2].getY())) / denominator;
+		double b = ((points[2].getY() - points[0].getY())*(x - points[2].getX()) + (points[0].getX() - points[2].getX())*(y - points[2].getY())) / denominator;
+		double c = 1 - a - b;
+
+		return 0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1;
 	}
 
 	@Override
@@ -142,9 +166,16 @@ public class NavMesh extends AbstractSearchSpace {
 
 			System.out.println(dt.points.length);
 
-			drawLine(pw, (int)(dt.points[0].getX() * scale), (int)(dt.points[0].getY() * scale), (int)(dt.points[1].getX() * scale), (int)(dt.points[1].getY() * scale) );
-			drawLine(pw, (int)(dt.points[1].getX() * scale), (int)(dt.points[1].getY() * scale), (int)(dt.points[2].getX() * scale), (int)(dt.points[2].getY() * scale) );
-			drawLine(pw, (int)(dt.points[2].getX() * scale), (int)(dt.points[2].getY() * scale), (int)(dt.points[0].getX() * scale), (int)(dt.points[0].getY() * scale) );
+			int x1 = Math.min((int)(dt.points[0].getX() * scale), side - 1);
+			int y1 = Math.min((int)(dt.points[0].getY() * scale), side - 1);
+			int x2 = Math.min((int)(dt.points[1].getX() * scale), side - 1);
+			int y2 = Math.min((int)(dt.points[1].getY() * scale), side - 1);
+			int x3 = Math.min((int)(dt.points[2].getX() * scale), side - 1);
+			int y3 = Math.min((int)(dt.points[2].getY() * scale), side - 1);
+
+			drawLine(pw, x1, y1, x2, y2);
+			drawLine(pw, x2, y2, x3, y3);
+			drawLine(pw, x3, y3, x1, y1);
 			//drawTriangle(g2d, dt);
 		}
 
@@ -174,6 +205,7 @@ public class NavMesh extends AbstractSearchSpace {
 		{
 			//if (!map.isWalkableAt(x, y))
 				//return false;
+
 			pw.setColor(x, y, javafx.scene.paint.Color.CYAN);
 
 			if (error > 0)

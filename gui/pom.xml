@@ -11,5 +11,19 @@
 
     <artifactId>pathfinding.gui</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>org.nekosaur</groupId>
+            <artifactId>pathfinding.lib</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>clipper</groupId>
+            <artifactId>de.lighti.clipper</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../resources/de-lighti-clipper.jar</systemPath>
+        </dependency>
+    </dependencies>
 </project>

@@ -185,9 +185,10 @@ public class Controller {
             try {
             	Alert alert = new Alert(AlertType.ERROR);
             	alert.setTitle("Error Message");
+                //System.out.println(event.
             	alert.setContentText(event.getSource().getException().getMessage());
             	alert.showAndWait();
-                //throw event.getSource().getException();
+                throw event.getSource().getException();
             } catch (Throwable throwable) {
                 throwable.printStackTrace();
             }

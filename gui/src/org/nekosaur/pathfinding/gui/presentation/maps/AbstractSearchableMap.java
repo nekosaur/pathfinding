@@ -55,8 +55,6 @@ public abstract class AbstractSearchableMap extends Pane implements ISearchableM
     public SearchSpace getSearchSpace() {
         return searchSpace;
     }
-    
-    
 
     @Override
 	public void setMapDecorator(TriConsumer<SearchSpace, MapCanvas, Node> decorator) {

@@ -16,7 +16,8 @@ public class MooreNeighbour {
         Vertex previous = null;
         for (int x = 0; x < data[0].length; x++) {
             for (int y = data.length - 1; y > 0; y--) {
-                if (data[y][x] > 0 && !contourVertices.contains(new Vertex(x, y))) {
+
+                if (data[y][x] > 0 && data[y+1][x] <= 0 && !contourVertices.contains(new Vertex(x, y))) {
                     contourVertices.add(new Vertex(x, y));
                     System.out.println("Found first vertex " + x + " " + y);
                     backtrack.add(previous);
@@ -43,7 +44,7 @@ public class MooreNeighbour {
         Vertex b = backtrack.peek();
         Vertex c = it.next();
 
-        while (MooreNeighbour.isNotFinished(s, backtrack.peek(), c, b)) {
+        while (MooreNeighbour.isNotFinished(s, backtrack.peek(), c, b, p)) {
             if (data[c.y][c.x] > 0) {
                 contourVertices.add(c);
                 B.add(c);
@@ -71,8 +72,8 @@ public class MooreNeighbour {
         return vertices;
     }
 
-    private static boolean isNotFinished(Vertex start, Vertex startBacktrack, Vertex current, Vertex currentBacktrack) {
-        return !(start.equals(current) && startBacktrack.equals(currentBacktrack));
+    private static boolean isNotFinished(Vertex start, Vertex startBacktrack, Vertex current, Vertex currentBacktrack, Vertex p) {
+        return !((start.equals(current) && startBacktrack.equals(currentBacktrack)) || current.equals(startBacktrack));
     }
 
     public static Iterator<Vertex> getIterator(Vertex boundaryPoint, Vertex originPoint) {

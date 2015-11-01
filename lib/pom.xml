@@ -16,7 +16,7 @@
             <artifactId>de.lighti.clipper</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/src/resources/de-lighti-clipper.jar</systemPath>
+            <systemPath>${project.basedir}/../resources/de-lighti-clipper.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
