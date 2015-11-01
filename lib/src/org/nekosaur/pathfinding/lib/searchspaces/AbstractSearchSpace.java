@@ -29,6 +29,14 @@ public abstract class AbstractSearchSpace implements SearchSpace {
 
 	public void allow(EnumSet<Option> options) { this.options = options; }
 
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 	protected Image resample(Image input, int newSize) {
 		final int W = (int) input.getWidth();
 		final int H = (int) input.getHeight();

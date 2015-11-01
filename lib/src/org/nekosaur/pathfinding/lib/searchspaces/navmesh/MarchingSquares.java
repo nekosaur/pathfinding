@@ -37,14 +37,14 @@ public class MarchingSquares {
 		this.data = data;
 	}
 	
-	public List<Vertex> identifyPerimeter(int x, int y) {
+	public List<Vertex> identifyPerimeter(int x, int y) throws Exception {
 		if (!valueExists(x, y))
-			throw new IllegalArgumentException("Vertex " + new Vertex(x, y) + " does not exist in data set");
+			throw new Exception("Vertex " + new Vertex(x, y) + " does not exist in data set");
 		
 		int index = calculateIndex(x, y);
 		
 		if (index <= 0 || index == 15)
-			throw new IllegalArgumentException("Vertex " + new Vertex(x, y) + " does not lie on a perimeter");
+			throw new Exception("Vertex " + new Vertex(x, y) + " index (" + index + ") does not lie on a perimeter");
 		
 		int startx = x;
 		int starty = y;

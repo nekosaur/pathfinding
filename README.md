@@ -16,7 +16,7 @@ trying for a refactor of pfsandbox
 
 ## searchspaces
 - implement more. look at corner graphs, nav meshes?
-- quadtree does not currently permit traveling diagonally between equal sizes nodes
+- quadtree does not currently permit traveling diagonally between equal sized nodes
 
 ## datastructures
 - HOT queues?

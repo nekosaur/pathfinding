@@ -122,7 +122,7 @@ public class JPSFinder extends AbstractPathfinder {
      * When finding neighbours in JPS we only want the node directly in front of the current node, going in the
      * direction of movement, plus any forced neighbours
      *
-     * @param Node Jump Vertex Successor node to find neighbours of
+     * @param node Jump Vertex Successor node to find neighbours of
      * @return A pruned set of neighbours
      */
     private List<Node> pruneNeighbours(Node node) {

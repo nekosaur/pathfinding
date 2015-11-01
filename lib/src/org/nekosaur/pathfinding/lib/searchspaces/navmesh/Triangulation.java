@@ -3,8 +3,10 @@ package org.nekosaur.pathfinding.lib.searchspaces.navmesh;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import de.lighti.clipper.*;
 import org.nekosaur.pathfinding.lib.common.Vertex;
 import org.poly2tri.Poly2Tri;
 import org.poly2tri.geometry.polygon.Polygon;
@@ -14,10 +16,6 @@ import org.poly2tri.triangulation.TriangulationPoint;
 import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
 import org.poly2tri.triangulation.sets.PointSet;
 
-import de.lighti.clipper.Clipper;
-import de.lighti.clipper.DefaultClipper;
-import de.lighti.clipper.Path;
-import de.lighti.clipper.Paths;
 import de.lighti.clipper.Clipper.ClipType;
 import de.lighti.clipper.Clipper.PolyType;
 import de.lighti.clipper.Point.LongPoint;
@@ -30,30 +28,42 @@ import de.lighti.clipper.Point.LongPoint;
  */
 public class Triangulation {
 	
-	public static List<DelaunayTriangle> test(List<Vertex> vertices) {
+	public static List<DelaunayTriangle> triangulate(int width, int height, Set<List<Vertex>> obstacles) {
 		Clipper clipper = new DefaultClipper();
 		
 		Path base = new Path(4);
 		base.add(new LongPoint(0, 0));
-		base.add(new LongPoint(8, 0));
-		base.add(new LongPoint(8, 8));
-		base.add(new LongPoint(0, 8));
-		
-		Path shape = new Path(vertices.size());
-		for (Vertex v : vertices)
-			shape.add(new LongPoint(v.x, v.y));
-		
+		base.add(new LongPoint(width, 0));
+		base.add(new LongPoint(width, height));
+		base.add(new LongPoint(0, height));
+
 		clipper.addPath(base, PolyType.SUBJECT, true);
-		clipper.addPath(shape, PolyType.CLIP, true);
-		
+
+		for (List<Vertex> obstacle : obstacles) {
+			System.out.println("Creating path for obstacle " + obstacle);
+			Path shape = new Path(obstacle.size());
+			for (Vertex v : obstacle)
+				shape.add(new LongPoint(v.x, v.y));
+
+			clipper.addPath(shape, PolyType.CLIP, true);
+		}
+
 		Paths solution = new Paths();
 		
 		clipper.execute(ClipType.DIFFERENCE, solution);
 		
 		System.out.println(solution);
+
+		ClipperOffset offset = new ClipperOffset();
 		
-		List<Path> holes = solution.stream().filter(path -> path.orientation() == false).collect(Collectors.toList());
-		List<Path> blocks = solution.stream().filter(path -> path.orientation() == true).collect(Collectors.toList());
+		List<Path> holes = solution.stream().filter(path -> !path.orientation()).collect(Collectors.toList());
+		List<Path> blocks = solution.stream().filter(path -> path.orientation()).collect(Collectors.toList());
+
+		Paths s = new Paths();
+		for (Path h : holes) {
+			offset.addPath(h, Clipper.JoinType.SQUARE, Clipper.EndType.CLOSED_POLYGON);
+		}
+		offset.execute(s, 0f);
 		
 		System.out.println("holes: " + holes.size());
 		System.out.println("blocks: " + blocks.size());
@@ -61,7 +71,7 @@ public class Triangulation {
 		List<DelaunayTriangle> triangles = new LinkedList<>();
 		for (Path p : blocks) {
 			Polygon polygon = pathToPolygon(p);
-			for (Path h : holes) {
+			for (Path h : s) {
 				if (p.isPointInPolygon(h.get(0)) >= 1)
 					polygon.addHole(pathToPolygon(h));
 			}
