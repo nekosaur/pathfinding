@@ -1,27 +1,39 @@
 # pathfinding
 
-trying for a refactor of pfsandbox
+personal project to teach myself pathfinding and everything it entails
 
 ## dependencies
- - com.airhacks:afterburner-topgun
- - javax.inject:javax.inject
- - com.google.guava:guava
- - it.unimi.dsi:fastutil
+- com.airhacks:afterburner-topgun
+- javax.inject:javax.inject
+- com.google.guava:guava
+- it.unimi.dsi:fastutil
+- de.lighti.clipper (http://www.lighti.de/projects/polygon-clipper-for-java/)
 
 ## pathfinders
 
-- ported most of the pathfinders from pfsandbox
-- fringe search needs to be checked
-- go through all and optimize where possible
+- A*
+- BFS
+- DFS
+- Dijkstra
+- Fringe
+- IDA*
+- IDDFS
+- JPS
+- Theta
+- Lazy Theta
 
 ## searchspaces
-- implement more. look at corner graphs, nav meshes?
-- quadtree does not currently permit traveling diagonally between equal sized nodes
+- Graph (not implemented in GUI)
+- Grid
+- NavMesh (needs lots of work)
+- QuadTree
 
-## datastructures
-- HOT queues?
+## TODO
+- QuadTree does not currently permit traveling diagonally between equal sized nodes
+- Implement HOT queues?
+- Refactor node to not explicitly depend on Vertex?
+- Double variant of Vertex?
 
 ## thoughts
-- probably not viable, but having map and vertex be completely immutable, pathfinders keep track of local variables by themselves, use functional interfaces?
 - how to handle pathfinder specific rendering needs, such as jps peeked nodes, and hpa abstracted graphs?
 - editable and searchable graph maps should probably be separated from the rest. right?
