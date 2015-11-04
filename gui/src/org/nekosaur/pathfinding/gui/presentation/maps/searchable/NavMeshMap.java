@@ -37,7 +37,9 @@ public class NavMeshMap extends AbstractSearchableMap {
         this.canvas.drawImage(searchSpace.draw((int)width));
 
         this.canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
-            Node n = searchSpace.getNode((int)(event.getX() * scaleFactor), (int)(event.getY() *scaleFactor));
+            System.out.println("Clicked on point [x=" + event.getX() + ", y=" + event.getY() + "]");
+            System.out.println("Searching for point [x=" + (int)(event.getX()*scaleFactor) + ", y=" + (int)(event.getY()*scaleFactor) + "]");
+            Node n = searchSpace.getNode(event.getX() * scaleFactor, event.getY() * scaleFactor);
 
             System.out.println("Clicked on " + n);
 
@@ -87,8 +89,10 @@ public class NavMeshMap extends AbstractSearchableMap {
 
         Color c = cstate.interpolate(cstatus, 0.5);
 
-        double b = 0.6 + Math.max(rand.nextDouble(), 0.2);
-        c = c.deriveColor(0, 1, b, 1);
+        double b = 0.7;
+        //c = c.deriveColor(0, 1, b, 1);
+
+        c = Color.WHITESMOKE;
 
         if (node.equals(goal.get()))
             c = Color.ORANGERED;

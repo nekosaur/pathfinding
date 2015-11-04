@@ -32,6 +32,7 @@ public class NavMesh extends AbstractSearchSpace {
 	private HashMap<DelaunayTriangle, List<Node>> triangleMap = new HashMap<>();
 	private HashMap<DelaunayTriangle, Triangle> delaunayMap = new HashMap<>();
 	private Map<Node, List<Node>> triangleAdjacencyMap = new HashMap<>();
+	private MapData originalData;
 
 	public NavMesh(int width, int height) {
 		super(width, height, EnumSet.of(Option.DIAGONAL_MOVEMENT, Option.MOVING_THROUGH_WALL_CORNERS));
@@ -44,22 +45,30 @@ public class NavMesh extends AbstractSearchSpace {
 		int[][] vertices = data.getVertices().get();
 		
 		NavMesh navMesh = new NavMesh(vertices[0].length, vertices[1].length);
+
+		navMesh.originalData = data;
 		
 		// Do MarchingSquares on all obstacles to get outlines
 		// Reduce vertices with VisvalingamWhyatt
 		MarchingSquares ms = new MarchingSquares(vertices);
+
+		/*
 		Set<List<Vertex>> obstaclePerimeters = new HashSet<>();
 		List<Vertex> obstacle;
 		while ((obstacle = MooreNeighbour.trace(vertices)) != null) {
 			System.out.println("ASD");
 			obstaclePerimeters.add(obstacle);
-		}
-		
-		System.out.println(obstaclePerimeters.size());
+		}*/
+		Set<List<Vertex>> obstaclePerimeters = new HashSet<>();
 
-		for (List<Vertex> perimeter : obstaclePerimeters) {
+		for (List<Vertex> perimeter : ms.identifyAll()) {
 			System.out.println(perimeter);
+			obstaclePerimeters.add(VisvalingamWhyatt.reduce(perimeter, (int)(perimeter.size() * 0.7)));
+			//obstaclePerimeters.add(DouglasPeucker.reduce(perimeter, 0.5f));
+			//obstaclePerimeters.add(perimeter);
 		}
+
+		System.out.println(obstaclePerimeters.size());
 		
 		// Triangulate complete mesh
 		System.out.println(navMesh.getWidth());
@@ -119,6 +128,16 @@ public class NavMesh extends AbstractSearchSpace {
 		return null;
 	}
 
+	@Override
+	public Node getNode(double x, double y) {
+		for (Map.Entry<DelaunayTriangle, Triangle> e : delaunayMap.entrySet()) {
+			DelaunayTriangle dt = e.getKey();
+			if (pointInTriangle(dt.points, x, y))
+				return e.getValue();
+		}
+		return null;
+	}
+
 	public DelaunayTriangle getTriangle(int x, int y) {
 		for (Map.Entry<DelaunayTriangle, Triangle> e : delaunayMap.entrySet()) {
 			if ((new Vertex(x, y)).equals((Vertex)e.getValue()))
@@ -131,6 +150,7 @@ public class NavMesh extends AbstractSearchSpace {
 		return getTriangle(n.x, n.y);
 	}
 
+	/*
 	private boolean pointInTriangle(TriangulationPoint[] points, int x, int y) {
 		double denominator = ((points[1].getY() - points[2].getY())*(points[0].getX() - points[2].getX()) + (points[2].getX() - points[1].getX())*(points[0].getY() - points[2].getY()));
 		double a = ((points[1].getY() - points[2].getY())*(x - points[2].getX()) + (points[2].getX() - points[1].getX())*(y - points[2].getY())) / denominator;
@@ -138,7 +158,32 @@ public class NavMesh extends AbstractSearchSpace {
 		double c = 1 - a - b;
 
 		return 0 <= a && a <= 1 && 0 <= b && b <= 1 && 0 <= c && c <= 1;
+	}*/
+
+	private int side(int x1, int y1, int x2, int y2, int x, int y) {
+		return (y2 - y1)*(x - x1) + (-x2 + x1)*(y - y1);
 	}
+
+	private boolean pointInTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int x, int y) {
+		boolean checkSide1 = side(x1, y1, x2, y2, x, y) >= 0;
+		boolean checkSide2 = side(x2, y2, x3, y3, x, y) >= 0;
+		boolean checkSide3 = side(x3, y3, x1, y1, x, y) >= 0;
+		return checkSide1 && checkSide2 && checkSide3;
+	}
+
+	private boolean pointInTriangle(TriangulationPoint[] points, double x, double y) {
+		int x1 = (int)(points[0].getX());
+		int y1 = (int)(points[0].getY());
+		int x2 = (int)(points[1].getX());
+		int y2 = (int)(points[1].getY());
+		int x3 = (int)(points[2].getX());
+		int y3 = (int)(points[2].getY());
+
+		Polygon p = new Polygon(new int[] {x1, x2, x3}, new int[] {y1, y2, y3}, 3);
+
+		return p.contains(x, y);
+	}
+
 
 	@Override
 	public boolean isWalkableAt(int x, int y) {
@@ -149,38 +194,32 @@ public class NavMesh extends AbstractSearchSpace {
 	@Override
 	public Image draw(int side) {
 		System.out.println("NavMesh draw");
-		//BufferedImage image = new BufferedImage(this.width, this.height, 3);
-		WritableImage image = new WritableImage(side, side);
+		BufferedImage bi = new BufferedImage(side, side, 3);
 		System.out.println(width + " " + height);
-
-		//Graphics2D g2d = (Graphics2D)image.getGraphics();
-		PixelWriter pw = image.getPixelWriter();
 
 		int scale = side / this.width;
 
+		Graphics2D g2d = (Graphics2D)bi.getGraphics();
+
+		g2d.setColor(Color.BLACK);
+		g2d.fillRect(0, 0, side, side);
+
 		for (Map.Entry<DelaunayTriangle, Triangle> e : delaunayMap.entrySet()) {
 			DelaunayTriangle dt = e.getKey();
-			Triangle t = e.getValue();
 
-			pw.setColor((int)(dt.centroid().getX() * scale), (int)(dt.centroid().getY() * scale), NodeState.color(t.state));
+			int[] xPoints = new int[] { (int)(dt.points[0].getX() * scale), (int)(dt.points[1].getX() * scale), (int)(dt.points[2].getX() * scale)};
+			int[] yPoints = new int[] { (int)(dt.points[0].getY() * scale), (int)(dt.points[1].getY() * scale), (int)(dt.points[2].getY() * scale)};
 
-			System.out.println(dt.points.length);
-
-			int x1 = Math.min((int)(dt.points[0].getX() * scale), side - 1);
-			int y1 = Math.min((int)(dt.points[0].getY() * scale), side - 1);
-			int x2 = Math.min((int)(dt.points[1].getX() * scale), side - 1);
-			int y2 = Math.min((int)(dt.points[1].getY() * scale), side - 1);
-			int x3 = Math.min((int)(dt.points[2].getX() * scale), side - 1);
-			int y3 = Math.min((int)(dt.points[2].getY() * scale), side - 1);
-
-			drawLine(pw, x1, y1, x2, y2);
-			drawLine(pw, x2, y2, x3, y3);
-			drawLine(pw, x3, y3, x1, y1);
-			//drawTriangle(g2d, dt);
+			g2d.setColor(new Color(0.9607843f, 0.9607843f, 0.9607843f));
+			g2d.fillPolygon(xPoints, yPoints, 3);
+			g2d.setColor(Color.CYAN);
+			g2d.setStroke(new BasicStroke(2));
+			g2d.drawLine(xPoints[0], yPoints[0], xPoints[1], yPoints[1]);
+			g2d.drawLine(xPoints[1], yPoints[1], xPoints[2], yPoints[2]);
+			g2d.drawLine(xPoints[2], yPoints[2], xPoints[0], yPoints[0]);
 		}
 
-		//return resample(SwingFXUtils.toFXImage(image, null), side);
-		return image;
+		return SwingFXUtils.toFXImage(bi, null);
 
 	}
 
@@ -234,8 +273,7 @@ public class NavMesh extends AbstractSearchSpace {
 
 	@Override
 	public SearchSpace copy() {
-		// TODO Auto-generated method stub
-		return null;
+		return NavMesh.create(originalData, options);
 	}
 
 	private class Triangle extends Node {

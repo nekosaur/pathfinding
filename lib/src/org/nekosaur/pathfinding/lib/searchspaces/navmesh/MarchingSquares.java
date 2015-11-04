@@ -1,7 +1,7 @@
 package org.nekosaur.pathfinding.lib.searchspaces.navmesh;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+
 import org.nekosaur.pathfinding.lib.common.Vertex;
 
 public class MarchingSquares {
@@ -30,21 +30,38 @@ public class MarchingSquares {
 	private int height;
 	
 	private int[][] data;
+
+	private Set<Vertex> visitedVertices = new HashSet<>();
 	
 	public MarchingSquares(int[][] data) {
 		this.width = data[0].length;
 		this.height = data.length;
 		this.data = data;
 	}
+
+	public Set<List<Vertex>> identifyAll() {
+		Set<List<Vertex>> perimeters = new HashSet<>();
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				List<Vertex> perimeter = identifyPerimeter(x, y);
+				if (perimeter != null)
+					perimeters.add(perimeter);
+			}
+		}
+		return perimeters;
+	}
 	
-	public List<Vertex> identifyPerimeter(int x, int y) throws Exception {
+	public List<Vertex> identifyPerimeter(int x, int y) {
 		if (!valueExists(x, y))
-			throw new Exception("Vertex " + new Vertex(x, y) + " does not exist in data set");
+			return null;
+
+		if (visitedVertices.contains(new Vertex(x + 1, y + 1)))
+			return null;
 		
 		int index = calculateIndex(x, y);
 		
 		if (index <= 0 || index == 15)
-			throw new Exception("Vertex " + new Vertex(x, y) + " index (" + index + ") does not lie on a perimeter");
+			return null;
 		
 		int startx = x;
 		int starty = y;
@@ -53,58 +70,61 @@ public class MarchingSquares {
 		int previousIndex = 0;
 		
 		do {
+			visitedVertices.add(new Vertex(x + 1, y + 1));
 			System.out.println("Adding " + new Vertex(x + 1, y + 1) + " to perimeter");
 			Direction direction = null;
 			
 			index = calculateIndex(x, y);
 			System.out.println("Index="+index);
 			switch (index) {
-				case 1:
+				case 1: /*◱*/
 					direction = Direction.S;
 					break;
-				case 2:
+				case 2: /*◲*/
 					direction = Direction.E;
 					break;
-				case 3:
+				case 3: /*⬒*/
 					direction = previous == Direction.W ? Direction.W : Direction.E;
 					break;
-				case 4:
+				case 4: /*◳*/
 					direction = Direction.N;
 					break;
-				case 5:
+				case 5: /*⍁*/
 					direction = previous == Direction.E ? Direction.S : Direction.N;
 					break;
-				case 6:
+				case 6: /*◧*/
 					direction = previous == Direction.S ? Direction.S : Direction.N;
 					break;
-				case 7:
+				case 7: /*◰ majority black */
 					direction = Direction.N;
 					break;
-				case 8:
+				case 8: /*◰*/
 					direction = Direction.W;
 					break;
-				case 9:
+				case 9: /*◨*/
 					direction = previous == Direction.S ? Direction.S : Direction.N;
 					break;
-				case 10:
+				case 10: /*⍂*/
 					direction = previous == Direction.E ? Direction.S : Direction.N;
 					break;
-				case 11:
+				case 11: /*◳ majority black */
 					direction = Direction.E;
 					break;
-				case 12:
+				case 12: /*⬓*/
 					direction = previous == Direction.E ? Direction.E : Direction.W;
 					break;
-				case 13:
+				case 13: /*◲ majority black */
 					direction = Direction.S;
 					break;
-				case 14:
+				case 14: /*◱ majority black */
 					direction = Direction.W;
 					break;
 			}
 
-			if (previousIndex != index)
-				perimeter.add(new Vertex(x + 1, y + 1));
+			if (previousIndex != index) {
+				Vertex v = new Vertex(x + 1, y + 1);
+				perimeter.add(v);
+			}
 			
 			x += direction.x;
 			y += direction.y;
@@ -116,7 +136,7 @@ public class MarchingSquares {
 		} while (x != startx || y != starty);
 		
 		// We add the start vertex again to close the loop
-		perimeter.add(new Vertex(startx + 1, starty + 1));
+		//perimeter.add(new Vertex(startx + 1, starty + 1));
 		
 		return perimeter;
 	}

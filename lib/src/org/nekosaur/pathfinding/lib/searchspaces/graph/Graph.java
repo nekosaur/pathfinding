@@ -82,7 +82,12 @@ public class Graph extends AbstractSearchSpace {
 
         return true;
     }
-    
+
+    @Override
+    public Node getNode(double x, double y) {
+        return null;
+    }
+
     public Node getNode(int x, int y) {
         return getNode(new Vertex(x, y));
     }

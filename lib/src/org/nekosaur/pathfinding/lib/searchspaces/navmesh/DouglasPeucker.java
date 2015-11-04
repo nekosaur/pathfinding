@@ -1,6 +1,7 @@
 package org.nekosaur.pathfinding.lib.searchspaces.navmesh;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import org.nekosaur.pathfinding.lib.common.Vertex;
 
@@ -16,18 +17,20 @@ public class DouglasPeucker {
 	
 	private DouglasPeucker() {}
 	
-	public static Vertex[] reduce(List<Vertex> list, double epsilon) {
+	public static List<Vertex> reduce(List<Vertex> list, double epsilon) {
 		Point[] points = new Point[list.size()];
 		for (int i = 0; i < list.size(); i++) {
 			points[i] = new Point(list.get(i).x, list.get(i).y);
 		}
-		
+
 		Point[] reduced = DouglasPeucker.reduce(points, epsilon);
-		Vertex[] vertices = new Vertex[reduced.length];
-		
+		//Vertex[] vertices = new Vertex[reduced.length];
+		List<Vertex> vertices = new LinkedList<>();
+
 		for (int i = 0; i < reduced.length; i++)
-			vertices[i] = new Vertex((int)Math.round(reduced[i].x), (int)Math.round(reduced[i].y));
-		
+			vertices.add(new Vertex((int)Math.round(reduced[i].x), (int)Math.round(reduced[i].y)));
+			//vertices[i] = new Vertex((int)Math.round(reduced[i].x), (int)Math.round(reduced[i].y));
+
 		return vertices;
 	}
 	

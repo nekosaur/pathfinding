@@ -62,6 +62,11 @@ public class QuadTree extends AbstractSearchSpace {
 		return height;
 	}
 
+	@Override
+	public Node getNode(double x, double y) {
+		return null;
+	}
+
 	public Node getNode(int x, int y) {
 		return root.getNearestLeaf(x, y);
 	}

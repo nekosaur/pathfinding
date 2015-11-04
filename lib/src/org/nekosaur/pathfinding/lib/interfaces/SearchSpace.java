@@ -13,6 +13,7 @@ public interface SearchSpace extends Copy<SearchSpace> {
 	int getWidth();
 	int getHeight();
 	Node getNode(int x, int y);
+	Node getNode(double x, double y);
 	boolean isWalkableAt(int x, int y);
 	void allow(EnumSet<Option> options);
 	boolean allows(Option option);

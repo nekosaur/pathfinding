@@ -68,7 +68,12 @@ public class Grid extends AbstractSearchSpace {
 		keys[node.y * height + node.x] = hash;
 		grid.put(hash, node);
 	}
-	
+
+	@Override
+	public Node getNode(double x, double y) {
+		return null;
+	}
+
 	public Node getNode(int x, int y) {
 		if (!isInsideGrid(x, y))
 			return null;

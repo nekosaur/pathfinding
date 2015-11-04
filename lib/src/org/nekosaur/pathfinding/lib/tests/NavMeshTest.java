@@ -135,8 +135,8 @@ public class NavMeshTest {
 		System.out.println("DouglasPeuckering");
 		//Vertex[] reduced = l.toArray(new Vertex[l.size()]);
 		//Vertex[] reduced = DouglasPeucker.reduce(Arrays.copyOfRange(l.toArray(new Vertex[l.size()]), l.indexOf(DouglasPeucker.topRight(l)), l.indexOf(DouglasPeucker.bottomRight(l))), 10);
-		Vertex[] reduced = DouglasPeucker.reduce(l, 3.6);
-		System.out.println(reduced.length);
+		//Vertex[] reduced = DouglasPeucker.reduce(l, 3.6);
+		//System.out.println(reduced.length);
 		
 		
 		List<Vertex> r = VisvalingamWhyatt.reduce(l, (l.size()/3)*2);

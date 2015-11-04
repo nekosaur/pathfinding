@@ -103,6 +103,11 @@ public class MapCanvas extends Pane {
         gcTop.setFill(color);
 
         gcTop.fillPolygon(xPoints, yPoints, 3);
+        gcTop.setStroke(Color.CYAN);
+        gcTop.setLineWidth(2);
+        gcTop.strokeLine(xPoints[0], yPoints[0], xPoints[1], yPoints[1]);
+        gcTop.strokeLine(xPoints[1], yPoints[1], xPoints[2], yPoints[2]);
+        gcTop.strokeLine(xPoints[2], yPoints[2], xPoints[0], yPoints[0]);
 
         gcTop.restore();
     }
