@@ -1,7 +1,7 @@
 package org.nekosaur.pathfinding.lib.pathfinders.ida;
 
 import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
 import org.nekosaur.pathfinding.lib.interfaces.Heuristic;
@@ -28,7 +28,7 @@ public class IDAFinder extends AbstractPathfinder {
     private Heuristic heuristic;
 
     @Override
-    public Result findPath(SearchSpace map, Vertex start, Vertex goal, Heuristic heuristic, double weight) throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {
+    public Result findPath(SearchSpace map, Point start, Point goal, Heuristic heuristic, double weight) throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {
         this.map = map;
         this.heuristic = heuristic;
 

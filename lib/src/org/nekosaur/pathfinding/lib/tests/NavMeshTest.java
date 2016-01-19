@@ -7,14 +7,13 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
 
 import org.nekosaur.pathfinding.lib.common.MapData;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.searchspaces.grid.Grid;
 import org.nekosaur.pathfinding.lib.searchspaces.navmesh.*;
@@ -114,20 +113,20 @@ public class NavMeshTest {
 			e.printStackTrace();
 		}*/
 		System.out.println("Getting contour");
-		List<Vertex> l = MooreNeighbour.trace(data);
+		List<Point> l = MooreNeighbour.trace(data);
 
 		g2d.setColor(Color.PINK);
-		Vertex start = null;
-		for (Vertex v : l) {
+		Point start = null;
+		for (Point v : l) {
 			
-			g2d.drawOval(v.x * cellSize - 5, v.y * cellSize - 5, 10, 10);
+			g2d.drawOval((int)v.x * cellSize - 5, (int)v.y * cellSize - 5, 10, 10);
 			
 			if (start == null) {
 				start = v;
 				continue;
 			}
 						
-			g2d.drawLine(start.x * cellSize + (cellSize/2), start.y * cellSize + (cellSize/2), v.x * cellSize + (cellSize/2), v.y * cellSize + (cellSize/2));
+			g2d.drawLine((int)start.x * cellSize + (cellSize/2), (int)start.y * cellSize + (cellSize/2), (int)v.x * cellSize + (cellSize/2), (int)v.y * cellSize + (cellSize/2));
 			start = v;
 		}
 		System.out.println(l);
@@ -139,20 +138,20 @@ public class NavMeshTest {
 		//System.out.println(reduced.length);
 		
 		
-		List<Vertex> r = VisvalingamWhyatt.reduce(l, (l.size()/3)*2);
+		List<Point> r = VisvalingamWhyatt.reduce(l, (l.size()/3)*2);
 		System.out.println(r.size());
 		System.out.println(r);
 		
 		g2d.setColor(Color.CYAN);
 
 		start = null;
-		for (Vertex v : r) {
+		for (Point v : r) {
 			if (start == null) {
 				start = v;
 				continue;
 			}
 			
-			g2d.drawLine(start.x * cellSize + (cellSize/2), start.y * cellSize + (cellSize/2), v.x * cellSize + (cellSize/2), v.y * cellSize + (cellSize/2));
+			g2d.drawLine((int)start.x * cellSize + (cellSize/2), (int)start.y * cellSize + (cellSize/2), (int)v.x * cellSize + (cellSize/2), (int)v.y * cellSize + (cellSize/2));
 			start = v;
 		}
 		
@@ -161,7 +160,7 @@ public class NavMeshTest {
 		
 		//Delaunay.triangulate(r);
 		//Triangulation.triangulate(r);
-		Set<List<Vertex>> set = new HashSet<>();
+		Set<List<Point>> set = new HashSet<>();
 		set.add(l);
 		List<DelaunayTriangle> triangles = Triangulation.triangulate(8, 8, set);
 		

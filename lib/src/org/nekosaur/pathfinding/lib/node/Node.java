@@ -1,9 +1,9 @@
 package org.nekosaur.pathfinding.lib.node;
 
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.interfaces.Copy;
 
-public class Node extends Vertex implements Comparable<Node>, Copy<Node> {
+public class Node extends Point implements Comparable<Node>, Copy<Node> {
 
 	public Node parent;
 	public double g;
@@ -11,13 +11,13 @@ public class Node extends Vertex implements Comparable<Node>, Copy<Node> {
 	public NodeState state;
 	public NodeStatus status;
 	
-	public Node(int x, int y) {
+	public Node(double x, double y) {
 		super(x, y);
 		state = NodeState.EMPTY;
 		status = NodeStatus.INACTIVE;
 	}
 	
-	public Node(int x, int y, NodeState state) {
+	public Node(double x, double y, NodeState state) {
 		this(x, y);
 		this.state = state;
 	}
@@ -62,7 +62,7 @@ public class Node extends Vertex implements Comparable<Node>, Copy<Node> {
 	
 	@Override
     public String toString() {
-        return String.format("%s G=%.2f H=%.2f F=%.2f STATE=%s STATUS=%s PARENT={x=%d,y=%d}", super.toString(), g, h, getF(), state, status, parent != null ? parent.x : -1, parent != null ? parent.y : -1);
+        return String.format("%s G=%.2f H=%.2f F=%.2f STATE=%s STATUS=%s PARENT=%s", super.toString(), g, h, getF(), state, status, parent != null ? parent.toString() : "null");
     }
 	
 }

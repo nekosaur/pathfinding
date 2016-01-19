@@ -4,12 +4,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.layout.Pane;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
-
 import org.nekosaur.pathfinding.gui.business.TriConsumer;
 import org.nekosaur.pathfinding.gui.presentation.maps.searchable.ISearchableMap;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.node.Node;
 
@@ -29,8 +26,8 @@ public abstract class AbstractSearchableMap extends Pane implements ISearchableM
     
     protected TriConsumer<SearchSpace, MapCanvas, Node> mapDecorator;
 
-    protected final ObjectProperty<Vertex> start = new SimpleObjectProperty<>();
-    protected final ObjectProperty<Vertex> goal = new SimpleObjectProperty<>();
+    protected final ObjectProperty<Point> start = new SimpleObjectProperty<>();
+    protected final ObjectProperty<Point> goal = new SimpleObjectProperty<>();
 
     public AbstractSearchableMap(double width, double height) {
 
@@ -43,11 +40,11 @@ public abstract class AbstractSearchableMap extends Pane implements ISearchableM
         this.getChildren().add(canvas);
     }
 
-    public ObjectProperty<Vertex> getStartProperty() {
+    public ObjectProperty<Point> getStartProperty() {
         return start;
     }
 
-    public ObjectProperty<Vertex> getGoalProperty() {
+    public ObjectProperty<Point> getGoalProperty() {
         return goal;
     }
 

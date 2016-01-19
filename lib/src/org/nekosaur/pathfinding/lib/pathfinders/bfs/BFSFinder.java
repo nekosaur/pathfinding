@@ -3,7 +3,7 @@ package org.nekosaur.pathfinding.lib.pathfinders.bfs;
 import java.util.*;
 
 import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.interfaces.Heuristic;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
@@ -19,7 +19,7 @@ public class BFSFinder extends AbstractPathfinder {
     Queue<Node> unvisitedNodes;
 
     @Override
-    public Result findPath(SearchSpace map, Vertex start, Vertex goal, Heuristic heuristic, double weight) throws NodeNotFoundException {
+    public Result findPath(SearchSpace map, Point start, Point goal, Heuristic heuristic, double weight) throws NodeNotFoundException {
         Node startNode = map.getNode(start.x, start.y);
         Node goalNode = map.getNode(goal.x, goal.y);
         
@@ -59,6 +59,6 @@ public class BFSFinder extends AbstractPathfinder {
 
         }
 
-        return new Result(new ArrayList<Vertex>(), stopClock(), operations);
+        return new Result(new ArrayList<Point>(), stopClock(), operations);
     }
 }

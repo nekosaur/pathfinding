@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import org.nekosaur.pathfinding.lib.common.Heuristics;
 import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.datastructures.BinaryHashHeap;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
@@ -29,7 +29,7 @@ public class ThetaFinder extends AbstractPathfinder {
 	private SearchSpace map;
 
 	@Override
-	public Result findPath(SearchSpace map, Vertex start, Vertex goal, Heuristic heuristic, double weight)
+	public Result findPath(SearchSpace map, Point start, Point goal, Heuristic heuristic, double weight)
 			throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {	
 	
 		this.map = map;
@@ -102,7 +102,7 @@ public class ThetaFinder extends AbstractPathfinder {
 
         }
 
-        return new Result(new ArrayList<Vertex>(), stopClock(), operations);
+        return new Result(new ArrayList<Point>(), stopClock(), operations);
 	}
 	
 	/**
@@ -144,16 +144,16 @@ public class ThetaFinder extends AbstractPathfinder {
 	 * Code from http://playtechs.blogspot.se/2007/03/raytracing-on-grid.html
 	 * 
 	 */
-	private boolean hasLineOfSight(int x0, int y0, int x1, int y1)
+	private boolean hasLineOfSight(double x0, double y0, double x1, double y1)
 	{
-	    int dx = Math.abs(x1 - x0);
-	    int dy = Math.abs(y1 - y0);
-	    int x = x0;
-	    int y = y0;
-	    int n = 1 + dx + dy;
+	    double dx = Math.abs(x1 - x0);
+	    double dy = Math.abs(y1 - y0);
+	    double x = x0;
+	    double y = y0;
+		double n = 1 + dx + dy;
 	    int x_inc = (x1 > x0) ? 1 : -1;
 	    int y_inc = (y1 > y0) ? 1 : -1;
-	    int error = dx - dy;
+		double error = dx - dy;
 	    dx *= 2;
 	    dy *= 2;
 

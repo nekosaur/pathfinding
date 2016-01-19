@@ -1,6 +1,6 @@
 package org.nekosaur.pathfinding.lib.common;
 
-public class Edge<T extends Vertex> {
+public class Edge<T extends Point> {
 
 	public final T start;
 	public final T end;

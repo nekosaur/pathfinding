@@ -157,6 +157,8 @@ public class MapTabPresenter implements Initializable {
 
         task.setOnFailed(event -> {
             try {
+                searchPane.getChildren().remove(pbar);
+
                 throw event.getSource().getException();
             } catch (Throwable throwable) {
                 throwable.printStackTrace();

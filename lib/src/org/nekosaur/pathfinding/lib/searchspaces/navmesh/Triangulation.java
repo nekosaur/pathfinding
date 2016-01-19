@@ -7,14 +7,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.lighti.clipper.*;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.poly2tri.Poly2Tri;
 import org.poly2tri.geometry.polygon.Polygon;
 import org.poly2tri.geometry.polygon.PolygonPoint;
-import org.poly2tri.geometry.primitives.Point;
-import org.poly2tri.triangulation.TriangulationPoint;
 import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
-import org.poly2tri.triangulation.sets.PointSet;
 
 import de.lighti.clipper.Clipper.ClipType;
 import de.lighti.clipper.Clipper.PolyType;
@@ -28,7 +25,7 @@ import de.lighti.clipper.Point.LongPoint;
  */
 public class Triangulation {
 	
-	public static List<DelaunayTriangle> triangulate(int width, int height, Set<List<Vertex>> obstacles) {
+	public static List<DelaunayTriangle> triangulate(int width, int height, Set<List<Point>> obstacles) {
 		Clipper clipper = new DefaultClipper();
 		
 		Path base = new Path(4);
@@ -39,11 +36,11 @@ public class Triangulation {
 
 		clipper.addPath(base, PolyType.SUBJECT, true);
 
-		for (List<Vertex> obstacle : obstacles) {
+		for (List<Point> obstacle : obstacles) {
 			System.out.println("Creating path for obstacle " + obstacle);
 			Path shape = new Path(obstacle.size());
-			for (Vertex v : obstacle)
-				shape.add(new LongPoint(v.x, v.y));
+			for (Point v : obstacle)
+				shape.add(new LongPoint((int)v.x, (int)v.y));
 
 			clipper.addPath(shape, PolyType.CLIP, true);
 		}
@@ -92,7 +89,7 @@ public class Triangulation {
 		return new Polygon(points);
 	}
 
-	public static void triangulate(List<Vertex> vertices) {
+	public static void triangulate(List<Point> vertices) {
 		List<PolygonPoint> points = new ArrayList<>();
 		
 		points.add(new PolygonPoint(0, 0));

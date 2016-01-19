@@ -3,7 +3,7 @@ package org.nekosaur.pathfinding.lib.tests;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import org.nekosaur.pathfinding.lib.common.MapData;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.searchspaces.grid.Grid;
 import org.nekosaur.pathfinding.lib.searchspaces.navmesh.MarchingSquares;
@@ -13,7 +13,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -103,24 +102,24 @@ public class MarchingSquaresTest {
 
 		MarchingSquares ms = new MarchingSquares(data);
 
-        Set<List<Vertex>> perimeters = ms.identifyAll();
+        Set<List<Point>> perimeters = ms.identifyAll();
 
         g2d.setColor(Color.PINK);
 
         System.out.println(perimeters.size());
 
-        for (List<Vertex> perimeter : perimeters) {
-            Vertex start = null;
-            for (Vertex v : perimeter) {
+        for (List<Point> perimeter : perimeters) {
+            Point start = null;
+            for (Point v : perimeter) {
 
-                g2d.drawOval(v.x * cellSize - 5, v.y * cellSize - 5, 10, 10);
+                g2d.drawOval((int)v.x * cellSize - 5, (int)v.y * cellSize - 5, 10, 10);
 
                 if (start == null) {
                     start = v;
                     continue;
                 }
 
-                g2d.drawLine(start.x * cellSize, start.y * cellSize, v.x * cellSize, v.y * cellSize);
+                g2d.drawLine((int)start.x * cellSize, (int)start.y * cellSize, (int)v.x * cellSize, (int)v.y * cellSize);
                 start = v;
             }
         }

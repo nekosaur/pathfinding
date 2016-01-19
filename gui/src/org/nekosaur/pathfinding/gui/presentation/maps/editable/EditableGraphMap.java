@@ -12,7 +12,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import org.nekosaur.pathfinding.gui.presentation.maps.AbstractMap;
 import org.nekosaur.pathfinding.lib.common.MapData;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.node.NodeState;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class EditableGraphMap extends AbstractMap implements IEditableMap {
 
         final ObjectProperty<EditableGraphNode> startNode = new SimpleObjectProperty<>();
         final ObjectProperty<EditableGraphNode> clickedNode = new SimpleObjectProperty<>();
-        final ObjectProperty<Vertex> delta = new SimpleObjectProperty<>();
+        final ObjectProperty<Point> delta = new SimpleObjectProperty<>();
 
         this.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
             int x = (int) event.getX();
@@ -67,7 +67,7 @@ public class EditableGraphMap extends AbstractMap implements IEditableMap {
                     return;
 
                 clickedNode.set(node.get());
-                delta.set(new Vertex((int) (node.get().getCenterX() - x), (int) (node.get().getCenterY() - y)));
+                delta.set(new Point((int) (node.get().getCenterX() - x), (int) (node.get().getCenterY() - y)));
             }
 
         });
@@ -85,9 +85,9 @@ public class EditableGraphMap extends AbstractMap implements IEditableMap {
             //if (x - NODE_SIZE / 2 < 0 || y - NODE_SIZE / 2 < 0)
                 //return;
 
-            Vertex d = delta.get();
+            Point d = delta.get();
 
-            node.setPosition(new Vertex(x + d.x, y + d.y));
+            node.setPosition(new Point(x + d.x, y + d.y));
         });
 
         this.addEventHandler(MouseEvent.MOUSE_RELEASED, event -> {
@@ -127,7 +127,7 @@ public class EditableGraphMap extends AbstractMap implements IEditableMap {
     }
 
     private void addNode(int x, int y) {
-        EditableGraphNode n = new EditableGraphNode(new Vertex(x, y), NodeState.EMPTY);
+        EditableGraphNode n = new EditableGraphNode(new Point(x, y), NodeState.EMPTY);
         nodes.add(n);
         this.getChildren().add(n);
         n.toFront();
@@ -175,11 +175,11 @@ public class EditableGraphMap extends AbstractMap implements IEditableMap {
     }
 
     private class EditableGraphNode extends Circle {
-        private Vertex position;
+        private Point position;
         private NodeState state;
         private final List<EditableGraphEdge> edges = new ArrayList<>();
 
-        public EditableGraphNode(Vertex position, NodeState state) {
+        public EditableGraphNode(Point position, NodeState state) {
             super(position.x, position.y, 50f);
 
             this.setStroke(Color.DARKGRAY);
@@ -203,11 +203,11 @@ public class EditableGraphMap extends AbstractMap implements IEditableMap {
             edges.remove(edge);
         }
 
-        public Vertex getPosition() {
+        public Point getPosition() {
             return position;
         }
 
-        public void setPosition(Vertex position) {
+        public void setPosition(Point position) {
             this.position = position;
             this.setCenterX(position.x);
             this.setCenterY(position.y);

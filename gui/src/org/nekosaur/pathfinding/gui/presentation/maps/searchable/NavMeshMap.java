@@ -1,17 +1,15 @@
 package org.nekosaur.pathfinding.gui.presentation.maps.searchable;
 
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import org.nekosaur.pathfinding.gui.presentation.maps.AbstractSearchableMap;
-import org.nekosaur.pathfinding.lib.common.AABB;
 import org.nekosaur.pathfinding.lib.common.MapData;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.node.Node;
 import org.nekosaur.pathfinding.lib.node.NodeState;
 import org.nekosaur.pathfinding.lib.node.NodeStatus;
 import org.nekosaur.pathfinding.lib.searchspaces.navmesh.NavMesh;
-import org.nekosaur.pathfinding.lib.searchspaces.quadtree.QuadTree;
-import org.poly2tri.triangulation.TriangulationPoint;
 import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
 
 import java.util.ArrayList;
@@ -38,15 +36,18 @@ public class NavMeshMap extends AbstractSearchableMap {
 
         this.canvas.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
             System.out.println("Clicked on point [x=" + event.getX() + ", y=" + event.getY() + "]");
-            System.out.println("Searching for point [x=" + (int)(event.getX()*scaleFactor) + ", y=" + (int)(event.getY()*scaleFactor) + "]");
+            System.out.println("Searching for point [x=" + event.getX()*scaleFactor + ", y=" + event.getY()*scaleFactor + "]");
             Node n = searchSpace.getNode(event.getX() * scaleFactor, event.getY() * scaleFactor);
+
+            if (n == null)
+                return;
 
             System.out.println("Clicked on " + n);
 
             if (n.state == NodeState.WALL)
                 return;
 
-            if (event.isPopupTrigger()) {
+            if (event.getButton() == MouseButton.SECONDARY) {
                 if (n.equals(start.get()))
                     return;
 
@@ -99,7 +100,7 @@ public class NavMeshMap extends AbstractSearchableMap {
         else if (node.equals(start.get()))
             c = Color.LIMEGREEN;
 
-        Vertex[] points = new Vertex[3];
+        Point[] points = new Point[3];
 
         double[] xPoints = new double[3];
         double[] yPoints = new double[3];
@@ -113,13 +114,13 @@ public class NavMeshMap extends AbstractSearchableMap {
     }
 
     @Override
-    public void drawPath(List<Vertex> path) {
+    public void drawPath(List<Point> path) {
 
-        List<Vertex> scaledPath = new ArrayList<>();
+        List<Point> scaledPath = new ArrayList<>();
 
         path.forEach(v -> {
             DelaunayTriangle dt = ((NavMesh)searchSpace).getTriangle(v.x, v.y);
-            scaledPath.add(new Vertex((int)(dt.centroid().getX() / scaleFactor), (int)(dt.centroid().getY() / scaleFactor)));
+            scaledPath.add(new Point((int)(dt.centroid().getX() / scaleFactor), (int)(dt.centroid().getY() / scaleFactor)));
         });
 
         canvas.drawLine(scaledPath, Color.YELLOW, lineWidth, false);

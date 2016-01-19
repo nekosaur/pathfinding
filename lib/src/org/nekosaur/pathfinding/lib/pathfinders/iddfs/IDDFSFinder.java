@@ -1,7 +1,7 @@
 package org.nekosaur.pathfinding.lib.pathfinders.iddfs;
 
 import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
 import org.nekosaur.pathfinding.lib.interfaces.Heuristic;
@@ -21,7 +21,7 @@ public class IDDFSFinder extends AbstractPathfinder {
     private SearchSpace map;
 
     @Override
-    public Result findPath(SearchSpace map, Vertex start, Vertex goal, Heuristic heuristic, double weight) throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {
+    public Result findPath(SearchSpace map, Point start, Point goal, Heuristic heuristic, double weight) throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {
 
         this.map = map;
 
@@ -30,7 +30,7 @@ public class IDDFSFinder extends AbstractPathfinder {
 
         int depthLimit = 1;
 
-        List<Vertex> foundPath = new ArrayList<>();
+        List<Point> foundPath = new ArrayList<>();
 
         startClock();
 
@@ -46,7 +46,7 @@ public class IDDFSFinder extends AbstractPathfinder {
         return new Result(foundPath, stopClock(), operations);
     }
 
-    private List<Vertex> depthFirstSearch(Node currentNode, Node goalNode, int currentDepth, int depthLimit) throws InterruptedException {
+    private List<Point> depthFirstSearch(Node currentNode, Node goalNode, int currentDepth, int depthLimit) throws InterruptedException {
         operations++;
 
         currentNode.status = NodeStatus.VISITED;
@@ -63,7 +63,7 @@ public class IDDFSFinder extends AbstractPathfinder {
 
                     neighbourNode.parent = currentNode;
 
-                    List<Vertex> result = depthFirstSearch(neighbourNode, goalNode, currentDepth, depthLimit);
+                    List<Point> result = depthFirstSearch(neighbourNode, goalNode, currentDepth, depthLimit);
 
                     if (result != null && !result.isEmpty())
                         return result;

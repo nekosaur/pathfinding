@@ -2,7 +2,7 @@ package org.nekosaur.pathfinding.lib.pathfinders.fringe;
 
 import it.unimi.dsi.fastutil.ints.Int2DoubleOpenHashMap;
 import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
 import org.nekosaur.pathfinding.lib.interfaces.Heuristic;
@@ -22,7 +22,7 @@ import java.util.LinkedList;
  */
 public class FringeFinder extends AbstractPathfinder {
     @Override
-    public Result findPath(SearchSpace map, Vertex start, Vertex goal, Heuristic heuristic, double weight) throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {
+    public Result findPath(SearchSpace map, Point start, Point goal, Heuristic heuristic, double weight) throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {
 
         Node startNode = map.getNode(start.x, start.y);
         Node goalNode = map.getNode(goal.x, goal.y);

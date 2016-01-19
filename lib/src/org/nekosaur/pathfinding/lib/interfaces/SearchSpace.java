@@ -12,9 +12,8 @@ public interface SearchSpace extends Copy<SearchSpace> {
 	double getMovementCost(Node n1, Node n2);
 	int getWidth();
 	int getHeight();
-	Node getNode(int x, int y);
 	Node getNode(double x, double y);
-	boolean isWalkableAt(int x, int y);
+	boolean isWalkableAt(double x, double y);
 	void allow(EnumSet<Option> options);
 	boolean allows(Option option);
 	Image draw(int side);

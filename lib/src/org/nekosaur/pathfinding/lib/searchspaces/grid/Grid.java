@@ -12,7 +12,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.lib.common.Option;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.exceptions.MissingMapDataException;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.node.Node;
@@ -65,27 +65,22 @@ public class Grid extends AbstractSearchSpace {
 	
 	private void addNode(Node node) {
 		long hash = hash(node);
-		keys[node.y * height + node.x] = hash;
+		keys[(int)node.y * height + (int)node.x] = hash;
 		grid.put(hash, node);
 	}
 
-	@Override
 	public Node getNode(double x, double y) {
-		return null;
-	}
-
-	public Node getNode(int x, int y) {
 		if (!isInsideGrid(x, y))
 			return null;
-		return grid.get(keys[y * height + x]);
+		return grid.get(keys[(int)y * height + (int)x]);
 	}
 	
 	public List<Node> getNeighbours(Node node) {
         ArrayList<Node> neighbours = new ArrayList<>();
-        int x = node.x;
-        int y = node.y;
+        double x = node.x;
+        double y = node.y;
 
-        ArrayList<Vertex> directions = new ArrayList<>();
+        ArrayList<Point> directions = new ArrayList<>();
         
         boolean u = false, 
         		r = false, 
@@ -98,19 +93,19 @@ public class Grid extends AbstractSearchSpace {
         		dl = false;
 
         if (isWalkableAt(x, y - 1)) {
-        	directions.add(new Vertex(x, y - 1)); // up
+        	directions.add(new Point(x, y - 1)); // up
         	u = true;
         }
         if (isWalkableAt(x + 1, y)) {
-        	directions.add(new Vertex(x + 1, y)); // right
+        	directions.add(new Point(x + 1, y)); // right
         	r = true;
         }
         if (isWalkableAt(x, y + 1)) {
-        	directions.add(new Vertex(x, y + 1)); // down
+        	directions.add(new Point(x, y + 1)); // down
         	d = true;
         }
         if (isWalkableAt(x - 1, y)) {
-        	directions.add(new Vertex(x - 1, y)); // left
+        	directions.add(new Point(x - 1, y)); // left
         	l = true;
         }
         
@@ -122,37 +117,37 @@ public class Grid extends AbstractSearchSpace {
         if (allows(Option.DIAGONAL_MOVEMENT)) {
             if (!allows(Option.MOVING_THROUGH_WALL_CORNERS)) {
                 if (ul && isWalkableAt(x - 1, y - 1))
-                    directions.add(new Vertex(x - 1, y - 1)); // upleft
+                    directions.add(new Point(x - 1, y - 1)); // upleft
                 if (ur && isWalkableAt(x + 1, y - 1))
-                    directions.add(new Vertex(x + 1, y - 1)); // upright
+                    directions.add(new Point(x + 1, y - 1)); // upright
                 if (dr && isWalkableAt(x + 1, y + 1))
-                    directions.add(new Vertex(x + 1, y + 1)); // downright
+                    directions.add(new Point(x + 1, y + 1)); // downright
                 if (dl && isWalkableAt(x - 1, y + 1))
-                    directions.add(new Vertex(x - 1, y + 1)); // downleft
+                    directions.add(new Point(x - 1, y + 1)); // downleft
             } else {
             	if (isWalkableAt(x - 1, y - 1))
-            		directions.add(new Vertex(x - 1, y - 1)); // upleft
+            		directions.add(new Point(x - 1, y - 1)); // upleft
             	if (isWalkableAt(x + 1, y - 1))
-            		directions.add(new Vertex(x + 1, y - 1)); // upright
+            		directions.add(new Point(x + 1, y - 1)); // upright
             	if (isWalkableAt(x + 1, y + 1))
-            		directions.add(new Vertex(x + 1, y + 1)); // downright
+            		directions.add(new Point(x + 1, y + 1)); // downright
             	if (isWalkableAt(x - 1, y + 1))
-            		directions.add(new Vertex(x - 1, y + 1)); // downleft
+            		directions.add(new Point(x - 1, y + 1)); // downleft
             }
         }
 
-        for (Vertex p : directions) {
-            neighbours.add(grid.get(keys[p.y * height + p.x]));
+        for (Point p : directions) {
+            neighbours.add(grid.get(keys[(int)p.y * height + (int)p.x]));
         }
 
         return neighbours;
     }
 
-    public boolean isWalkableAt(int x, int y) {
-        return (isInsideGrid(x, y) && grid.get(keys[y * height + x]).state != NodeState.WALL);
+    public boolean isWalkableAt(double x, double y) {
+        return (isInsideGrid(x, y) && grid.get(keys[(int)y * height + (int)x]).state != NodeState.WALL);
     }
 
-    private boolean isInsideGrid(int x, int y) {
+    private boolean isInsideGrid(double x, double y) {
         return (x >= 0 && x < width) && (y >= 0 && y < height);
     }
 
@@ -173,8 +168,8 @@ public class Grid extends AbstractSearchSpace {
 	private long hash(Node node) {
 		long hash = rand.nextLong();
 		
-		hash ^= node.x;
-		hash ^= node.y;
+		hash ^= Double.doubleToLongBits(node.x);
+		hash ^= Double.doubleToLongBits(node.y);
 		
 		return hash;
 	}

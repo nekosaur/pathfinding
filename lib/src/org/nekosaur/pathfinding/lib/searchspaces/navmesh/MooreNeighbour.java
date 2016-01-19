@@ -1,6 +1,6 @@
 package org.nekosaur.pathfinding.lib.searchspaces.navmesh;
 
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 
 import java.util.*;
 
@@ -9,43 +9,43 @@ import java.util.*;
  */
 public class MooreNeighbour {
 
-    private static final Vertex[] mooreNeighbours = new Vertex[] { new Vertex(-1, -1), new Vertex(0, -1), new Vertex(1, -1), new Vertex(1, 0), new Vertex(1, 1), new Vertex(0, 1), new Vertex(-1, 1), new Vertex(-1, 0)};
-    private static final Set<Vertex> contourVertices = new HashSet<>();
+    private static final Point[] mooreNeighbours = new Point[] { new Point(-1, -1), new Point(0, -1), new Point(1, -1), new Point(1, 0), new Point(1, 1), new Point(0, 1), new Point(-1, 1), new Point(-1, 0)};
+    private static final Set<Point> contourVertices = new HashSet<>();
 
-    public static Vertex getFirstVertex(int[][] data, Queue<Vertex> backtrack) {
-        Vertex previous = null;
+    public static Point getFirstVertex(int[][] data, Queue<Point> backtrack) {
+        Point previous = null;
         for (int x = 0; x < data[0].length; x++) {
             for (int y = data.length - 1; y > 0; y--) {
 
-                if (data[y][x] > 0 && data[y+1][x] <= 0 && !contourVertices.contains(new Vertex(x, y))) {
-                    contourVertices.add(new Vertex(x, y));
+                if (data[y][x] > 0 && data[y+1][x] <= 0 && !contourVertices.contains(new Point(x, y))) {
+                    contourVertices.add(new Point(x, y));
                     System.out.println("Found first vertex " + x + " " + y);
                     backtrack.add(previous);
-                    return new Vertex(x, y);
+                    return new Point(x, y);
                 } else {
-                    previous = new Vertex(x, y);
+                    previous = new Point(x, y);
                 }
             }
         }
         return null;
     }
 
-    public static List<Vertex> trace(int[][] data) {
-        Set<Vertex> B = new LinkedHashSet<>();
-        Queue<Vertex> backtrack = new ArrayDeque<>();
-        Vertex s = MooreNeighbour.getFirstVertex(data, backtrack);
+    public static List<Point> trace(int[][] data) {
+        Set<Point> B = new LinkedHashSet<>();
+        Queue<Point> backtrack = new ArrayDeque<>();
+        Point s = MooreNeighbour.getFirstVertex(data, backtrack);
 
         if (s == null)
             return null;
 
         B.add(s);
-        Vertex p = s;
-        Iterator<Vertex> it = MooreNeighbour.getIterator(p, backtrack.peek());
-        Vertex b = backtrack.peek();
-        Vertex c = it.next();
+        Point p = s;
+        Iterator<Point> it = MooreNeighbour.getIterator(p, backtrack.peek());
+        Point b = backtrack.peek();
+        Point c = it.next();
 
         while (MooreNeighbour.isNotFinished(s, backtrack.peek(), c, b, p)) {
-            if (data[c.y][c.x] > 0) {
+            if (data[(int)c.y][(int)c.x] > 0) {
                 contourVertices.add(c);
                 B.add(c);
                 b = p;
@@ -65,35 +65,35 @@ public class MooreNeighbour {
         }
         vertices.add(vertices.get(0));
         */
-        List<Vertex> vertices = new LinkedList<>(B);
+        List<Point> vertices = new LinkedList<>(B);
         //vertices.add(s);
 
 
         return vertices;
     }
 
-    private static boolean isNotFinished(Vertex start, Vertex startBacktrack, Vertex current, Vertex currentBacktrack, Vertex p) {
+    private static boolean isNotFinished(Point start, Point startBacktrack, Point current, Point currentBacktrack, Point p) {
         return !((start.equals(current) && startBacktrack.equals(currentBacktrack)) || current.equals(startBacktrack));
     }
 
-    public static Iterator<Vertex> getIterator(Vertex boundaryPoint, Vertex originPoint) {
-        int dx = originPoint.x - boundaryPoint.x;
-        int dy = originPoint.y - boundaryPoint.y;
-        Vertex startNeighbour = new Vertex(dx, dy);
+    public static Iterator<Point> getIterator(Point boundaryPoint, Point originPoint) {
+        double dx = originPoint.x - boundaryPoint.x;
+        double dy = originPoint.y - boundaryPoint.y;
+        Point startNeighbour = new Point(dx, dy);
 
         return new NeighbourIterator(boundaryPoint, startNeighbour);
     }
 
-    private static class NeighbourIterator implements Iterator<Vertex> {
+    private static class NeighbourIterator implements Iterator<Point> {
 
-        Queue<Vertex> neighbours = new ArrayDeque<>();
+        Queue<Point> neighbours = new ArrayDeque<>();
 
-        public NeighbourIterator(Vertex boundaryPoint, Vertex startNeighbour) {
+        public NeighbourIterator(Point boundaryPoint, Point startNeighbour) {
             for (int i = 0; i < mooreNeighbours.length; i++) {
                 if (mooreNeighbours[i].equals(startNeighbour)) {
                     i = (i + 1) % mooreNeighbours.length;
                     while (neighbours.size() < 8) {
-                        neighbours.add(new Vertex(boundaryPoint.x + mooreNeighbours[i].x, boundaryPoint.y + mooreNeighbours[i].y));
+                        neighbours.add(new Point(boundaryPoint.x + mooreNeighbours[i].x, boundaryPoint.y + mooreNeighbours[i].y));
                         i = (i + 1) % mooreNeighbours.length;
                     }
                     break;
@@ -107,7 +107,7 @@ public class MooreNeighbour {
         }
 
         @Override
-        public Vertex next() {
+        public Point next() {
             return neighbours.remove();
         }
     }

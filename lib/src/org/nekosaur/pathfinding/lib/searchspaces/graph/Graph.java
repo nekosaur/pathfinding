@@ -9,7 +9,7 @@ import java.util.Optional;
 import javafx.scene.image.Image;
 import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.lib.common.Option;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.node.Node;
 import org.nekosaur.pathfinding.lib.node.NodeState;
@@ -67,8 +67,8 @@ public class Graph extends AbstractSearchSpace {
         return (SearchSpace)graph;
     }
 
-    private boolean containsNode(Vertex p) {
-        return nodes.containsKey(keys[p.y * height + p.x]);
+    private boolean containsNode(Point p) {
+        return nodes.containsKey(keys[(int)p.y * height + (int)p.x]);
     }
 
     private boolean addNode(Node node) {
@@ -77,30 +77,25 @@ public class Graph extends AbstractSearchSpace {
 
         // TODO: Check spread of hash function and index
         long hash = hash(node);
-        keys[node.y * height + node.x] = hash;
+        keys[(int)node.y * height + (int)node.x] = hash;
         nodes.put(hash, new GraphNode<>(node));
 
         return true;
     }
 
-    @Override
     public Node getNode(double x, double y) {
-        return null;
+        return getNode(new Point(x, y));
     }
 
-    public Node getNode(int x, int y) {
-        return getNode(new Vertex(x, y));
-    }
-
-    public Node getNode(Vertex p) {
+    public Node getNode(Point p) {
         if (!containsNode(p))
             return null;
 
-        return nodes.get(keys[p.y * height + p.x]).getNode();
+        return nodes.get(keys[(int)p.y * height + (int)p.x]).getNode();
     }
 
     private GraphNode<Node> getGraphNode(Node n) {
-        return nodes.get(keys[n.y * height + n.x]);
+        return nodes.get(keys[(int)n.y * height + (int)n.x]);
     }
 
     public boolean addEdge(Node n1, Node n2, double weight, boolean directed) {
@@ -121,16 +116,16 @@ public class Graph extends AbstractSearchSpace {
 		return nodes.get(hash).getNode();
 	}
 	
-	public long getHash(int x, int y) {
-		return keys[y * height + x];
+	public long getHash(double x, double y) {
+		return keys[(int)y * height + (int)x];
 	}
 	
-	public long getHash(Vertex p) {
+	public long getHash(Point p) {
 		return getHash(p.x, p.y);
 	}
     
-    public boolean isWalkableAt(int x, int y) {
-        return (isInsideGrid(x, y) && nodes.containsKey(keys[y * height + x])/* && searchable.get(gridHash[y * height + x]).isWalkable()*/ );
+    public boolean isWalkableAt(double x, double y) {
+        return (isInsideGrid(x, y) && nodes.containsKey(keys[(int)y * height + (int)x])/* && searchable.get(gridHash[y * height + x]).isWalkable()*/ );
     }
 
     @Override
@@ -138,11 +133,11 @@ public class Graph extends AbstractSearchSpace {
         return null;
     }
 
-    public boolean isWalkableAt(Vertex p) {
+    public boolean isWalkableAt(Point p) {
         return isWalkableAt(p.x, p.y);
     }
 
-    private boolean isInsideGrid(int x, int y) {
+    private boolean isInsideGrid(double x, double y) {
         return (x >= 0 && x < width) && (y >= 0 && y < height);
     }
     
@@ -187,8 +182,8 @@ public class Graph extends AbstractSearchSpace {
     private long hash(Node node) {
         long hash = rand.nextLong();
 
-        hash ^= node.x;
-        hash ^= node.y;
+        hash ^= Double.doubleToLongBits(node.x);
+        hash ^= Double.doubleToLongBits(node.y);
 
         return hash;
     }

@@ -1,7 +1,7 @@
 package org.nekosaur.pathfinding.lib.pathfinders.dfs;
 
 import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
 import org.nekosaur.pathfinding.lib.interfaces.Heuristic;
@@ -19,7 +19,7 @@ import java.util.List;
 public class DFSFinder extends AbstractPathfinder {
 
     @Override
-    public Result findPath(SearchSpace map, Vertex start, Vertex goal, Heuristic heuristic, double weight) throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {
+    public Result findPath(SearchSpace map, Point start, Point goal, Heuristic heuristic, double weight) throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {
         startClock();
 
         Node startNode = map.getNode(start.x, start.y);
@@ -32,7 +32,7 @@ public class DFSFinder extends AbstractPathfinder {
 
     }
 
-    private List<Vertex> depthFirstSearch(SearchSpace map, Node currentNode, Node goalNode) throws InterruptedException {
+    private List<Point> depthFirstSearch(SearchSpace map, Node currentNode, Node goalNode) throws InterruptedException {
         operations++;
 
         currentNode.status = NodeStatus.VISITED;
@@ -45,7 +45,7 @@ public class DFSFinder extends AbstractPathfinder {
             if (neighbourNode.status != NodeStatus.VISITED) {
                 neighbourNode.parent = currentNode;
 
-                List<Vertex> result = depthFirstSearch(map, neighbourNode, goalNode);
+                List<Point> result = depthFirstSearch(map, neighbourNode, goalNode);
 
                 if (result != null && !result.isEmpty())
                     return result;

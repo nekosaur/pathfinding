@@ -8,7 +8,7 @@ import javafx.scene.control.Tooltip;
 
 import org.nekosaur.pathfinding.gui.presentation.maps.AbstractSearchableMap;
 import org.nekosaur.pathfinding.lib.common.MapData;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.node.Node;
 import org.nekosaur.pathfinding.lib.node.NodeState;
 import org.nekosaur.pathfinding.lib.node.NodeStatus;
@@ -112,11 +112,11 @@ public class GridMap extends AbstractSearchableMap {
     }
 
 	@Override
-	public void drawPath(List<Vertex> path) {
-		List<Vertex> centeredPath = new ArrayList<>();
+	public void drawPath(List<Point> path) {
+		List<Point> centeredPath = new ArrayList<>();
 
 		path.forEach(v -> {
-			centeredPath.add(new Vertex((int)((v.x * cellWidth) + cellWidth / 2), (int)((v.y * cellHeight) + cellHeight / 2)));
+			centeredPath.add(new Point((int)((v.x * cellWidth) + cellWidth / 2), (int)((v.y * cellHeight) + cellHeight / 2)));
 		});
 
 		canvas.drawLine(centeredPath, Color.YELLOW, lineWidth, false);

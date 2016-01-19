@@ -1,14 +1,14 @@
 package org.nekosaur.pathfinding.lib.common;
 
 public class AABB {
-    public final int x;
-    public final int y;
-    public final int width;
-    public final int height;
-    public final int cx;
-    public final int cy;
+    public final double x;
+    public final double y;
+    public final double width;
+    public final double height;
+    public final double cx;
+    public final double cy;
     
-    public AABB(int x, int y, int width, int height) {
+    public AABB(double x, double y, double width, double height) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -17,17 +17,17 @@ public class AABB {
         this.cy = y + height / 2;
     }
     
-    public boolean contains(Vertex v) {
+    public boolean contains(Point v) {
         return (v.x >= x && v.x < x + width) && (v.y >= y && v.y < y + width);
     }
     
-    public boolean contains(int vx, int vy) {
+    public boolean contains(double vx, double vy) {
     	return (vx >= x && vx < x + width) && (vy >= y && vy < y + width); 
     }
     
     @Override
     public String toString() {
-        return String.format("{x=%d, y=%d, w=%d, h=%d}", x, y, width, height);
+        return String.format("{x=%.1f, y=%.1f, w=%.1f, h=%.1f}", x, y, width, height);
     }
     
 }

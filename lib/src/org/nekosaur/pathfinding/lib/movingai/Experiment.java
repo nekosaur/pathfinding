@@ -1,6 +1,6 @@
 package org.nekosaur.pathfinding.lib.movingai;
 
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 
 /**
  * @author nekosaur
@@ -11,11 +11,11 @@ public class Experiment {
     String mapName;
     int mapWidth;
     int mapHeight;
-    Vertex startPosition;
-    Vertex goalPosition;
+    Point startPosition;
+    Point goalPosition;
     double optimalLength;
 
-    public Experiment(Vertex startPosition, Vertex goalPosition, int mapWidth, int mapHeight, int bucket, double optimalLength, String mapName) {
+    public Experiment(Point startPosition, Point goalPosition, int mapWidth, int mapHeight, int bucket, double optimalLength, String mapName) {
         this.bucket = bucket;
         this.mapName = mapName;
         this.mapWidth = mapWidth;
@@ -25,7 +25,7 @@ public class Experiment {
         this.optimalLength = optimalLength;
     }
 
-    public Experiment(Vertex startPosition, Vertex goalPosition, int bucket, double optimalLength, String mapName) {
+    public Experiment(Point startPosition, Point goalPosition, int bucket, double optimalLength, String mapName) {
         this.startPosition = startPosition;
         this.goalPosition = goalPosition;
         this.optimalLength = optimalLength;
@@ -33,11 +33,11 @@ public class Experiment {
         this.bucket = bucket;
     }
 
-    public Vertex getStartPosition() {
+    public Point getStartPosition() {
         return startPosition;
     }
 
-    public Vertex getGoalPosition() {
+    public Point getGoalPosition() {
         return goalPosition;
     }
 

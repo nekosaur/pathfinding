@@ -2,7 +2,7 @@ package org.nekosaur.pathfinding.lib.tests;
 
 import java.util.List;
 
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.movingai.MovingAI;
 
 import javafx.scene.image.Image;
@@ -61,13 +61,13 @@ int[][] data = MovingAI.loadMap(System.getProperty("user.dir") + "\\" + "brc000d
 		
 	}
 	
-	public static WritableImage drawPath(WritableImage image, List<Vertex> path) {
+	public static WritableImage drawPath(WritableImage image, List<Point> path) {
 		PixelWriter pw = image.getPixelWriter();
 		
 		Color c = Color.rgb(0, 0, 255);
-		for (Vertex v : path) {
+		for (Point v : path) {
 			c = c.deriveColor(0, 1, 0.8, 1);
-			pw.setColor(v.x, v.y, c);
+			pw.setColor((int)v.x, (int)v.y, c);
 		}
 		
 		return image;

@@ -1,6 +1,6 @@
 package org.nekosaur.pathfinding.gui.business.events;
 
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 
 import java.util.List;
 
@@ -9,13 +9,13 @@ import java.util.List;
  */
 public class PathFoundEvent {
 
-    private final List<Vertex> path;
+    private final List<Point> path;
 
-    public PathFoundEvent(List<Vertex> path) {
+    public PathFoundEvent(List<Point> path) {
         this.path = path;
     }
 
-    public List<Vertex> getPath() {
+    public List<Point> getPath() {
         return path;
     }
 }

@@ -1,6 +1,6 @@
 package org.nekosaur.pathfinding.lib.tests;
 
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.searchspaces.navmesh.MooreNeighbour;
 
 import java.util.List;
@@ -32,10 +32,10 @@ public class MooreNeighbourTest {
                 {0, 0, 0, 0, 0, 0, 0, 0}
         };
 
-        List<Vertex> contour = MooreNeighbour.trace(data);
+        List<Point> contour = MooreNeighbour.trace(data);
 
         System.out.println("contour");
-        for (Vertex v : contour)
+        for (Point v : contour)
             System.out.println(v);
 
     }

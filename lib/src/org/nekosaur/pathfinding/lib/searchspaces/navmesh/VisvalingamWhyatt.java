@@ -3,14 +3,13 @@ package org.nekosaur.pathfinding.lib.searchspaces.navmesh;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.nekosaur.pathfinding.lib.common.Vertex;
 import org.nekosaur.pathfinding.lib.datastructures.BinaryHashHeap;
 
 public class VisvalingamWhyatt {
 
 	private VisvalingamWhyatt() {};
 	
-	public static List<Vertex> reduce(List<Vertex> list, int verticesToKeep) {
+	public static List<org.nekosaur.pathfinding.lib.common.Point> reduce(List<org.nekosaur.pathfinding.lib.common.Point> list, int verticesToKeep) {
 		BinaryHashHeap<Point> heap = new BinaryHashHeap<Point>(Point.class, list.size()*2);
 		
 		LinkedList<Point> points = new LinkedList<>();
@@ -21,7 +20,7 @@ public class VisvalingamWhyatt {
 		Point e = null;
 		
 		for (int i = 0; i < list.size(); i++) {
-			Point point = new Point(list.get(i).x, list.get(i).y);
+			Point point = new Point((int)list.get(i).x, (int)list.get(i).y);
 			points.add(point);
 			
 			// This is not part of proper algorithm, own attempt to prettify hull
@@ -77,7 +76,7 @@ public class VisvalingamWhyatt {
 				heap.update(previous);
 			}
 			if (i < points.size() - 1) {
-				Point next = points.get(i);		
+				Point next = points.get(i);
 				next.area = VisvalingamWhyatt.computeArea(points, i);
 				//System.out.println("New triangle area for point " + next + " is " + next.area);				
 				heap.update(next);
@@ -85,10 +84,10 @@ public class VisvalingamWhyatt {
 			
 		}
 				
-		List<Vertex> reduced = new LinkedList<>();
+		List<org.nekosaur.pathfinding.lib.common.Point> reduced = new LinkedList<>();
 		
 		for (Point p : points) {
-			reduced.add(new Vertex(p.x, p.y));
+			reduced.add(new org.nekosaur.pathfinding.lib.common.Point(p.x, p.y));
 		}
 		
 		return reduced;
@@ -102,10 +101,11 @@ public class VisvalingamWhyatt {
 		return Math.abs((a.x*b.y + b.x*c.y + c.x*a.y - a.x*c.y - c.x*b.y - b.x*a.y) / (double)2);
 	}
 	
-	private static double computeArea(Vertex a, Vertex b, Vertex c) {
+	private static double computeArea(org.nekosaur.pathfinding.lib.common.Point a, org.nekosaur.pathfinding.lib.common.Point b, org.nekosaur.pathfinding.lib.common.Point c) {
 		return Math.abs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2);
 	}
-	
+
+
 	static class Point implements Comparable<Point> {
 		public final int x;
 		public final int y;
@@ -166,4 +166,5 @@ public class VisvalingamWhyatt {
 		
 		
 	}
+
 }

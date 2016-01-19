@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.nekosaur.pathfinding.lib.common.Buffer;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.interfaces.Pathfinder;
 import org.nekosaur.pathfinding.lib.node.Node;
 
@@ -26,8 +26,8 @@ public abstract class AbstractPathfinder implements Pathfinder {
         return System.nanoTime() - startTime;
     }
     
-    protected List<Vertex> reconstructPath(Node goal) {
-        List<Vertex> reconstructedPath = new ArrayList<>();
+    protected List<Point> reconstructPath(Node goal) {
+        List<Point> reconstructedPath = new ArrayList<>();
 
         Node current = goal;
         while (current != null) {

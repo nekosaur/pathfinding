@@ -3,7 +3,7 @@ package org.nekosaur.pathfinding.lib.tests;
 import org.nekosaur.pathfinding.lib.common.Heuristics;
 import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
 import org.nekosaur.pathfinding.lib.interfaces.Pathfinder;
@@ -24,9 +24,9 @@ public class GridTest {
 		
 		Result r;
 		try {
-			r = f.findPath(map, new Vertex(28,16), new Vertex(30,33), Heuristics.euclidean, 1);
+			r = f.findPath(map, new Point(28,16), new Point(30,33), Heuristics.euclidean, 1);
 			
-			for (Vertex v : r.path()) {
+			for (Point v : r.path()) {
 				System.out.println(v);
 			}
 			

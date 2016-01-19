@@ -50,8 +50,8 @@ public class Controller {
     private Map<String, Supplier<Pathfinder>> pathfinders;
     private Map<String, Heuristic> heuristics;
 	
-	private final ObjectProperty<Vertex> start = new SimpleObjectProperty<>();
-	private final ObjectProperty<Vertex> goal = new SimpleObjectProperty<>();
+	private final ObjectProperty<Point> start = new SimpleObjectProperty<>();
+	private final ObjectProperty<Point> goal = new SimpleObjectProperty<>();
 
     private final EventBus eventBus = new EventBus();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -83,11 +83,11 @@ public class Controller {
         return heuristics.keySet();
     }
     
-    public ObjectProperty<Vertex> getStartProperty() {
+    public ObjectProperty<Point> getStartProperty() {
 		return start;
 	}
 
-	public ObjectProperty<Vertex> getGoalProperty() {
+	public ObjectProperty<Point> getGoalProperty() {
 		return goal;
 	}
 
@@ -175,7 +175,7 @@ public class Controller {
                     return pathfinder.findPath(searchSpace, start.get(), goal.get(), heuristic, weight.get());
                 } catch (InterruptedException ex) {
                     System.out.println("Task was interrupted");
-                    return new Result(new ArrayList<Vertex>(), 0, 0, 0);
+                    return new Result(new ArrayList<Point>(), 0, 0, 0);
                 }
             }
         };

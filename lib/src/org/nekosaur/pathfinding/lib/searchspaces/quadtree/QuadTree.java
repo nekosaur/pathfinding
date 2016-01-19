@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import org.nekosaur.pathfinding.lib.common.AABB;
 import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.lib.common.Option;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.node.Node;
 import org.nekosaur.pathfinding.lib.node.NodeState;
@@ -49,7 +49,7 @@ public class QuadTree extends AbstractSearchSpace {
 	}
 
 	public double getMovementCost(Node n1, Node n2) {
-		Vertex d = n1.delta(n2);
+		Point d = n1.delta(n2);
 		
 		return Math.sqrt(d.x*d.x + d.y*d.y);
 	}
@@ -62,20 +62,15 @@ public class QuadTree extends AbstractSearchSpace {
 		return height;
 	}
 
-	@Override
 	public Node getNode(double x, double y) {
-		return null;
-	}
-
-	public Node getNode(int x, int y) {
 		return root.getNearestLeaf(x, y);
 	}
 
-	public QuadNode getQuadNode(int x, int y) {
+	public QuadNode getQuadNode(double x, double y) {
 		return root.getNearestNode(x, y);
 	}
 
-	public boolean isWalkableAt(int x, int y) {
+	public boolean isWalkableAt(double x, double y) {
 		if (getQuadNode(x, y).isObstructed())
 			return false;
 
@@ -88,7 +83,7 @@ public class QuadTree extends AbstractSearchSpace {
 		List<Node> nodes = root.getNodes(new ArrayList<>());
 
 		for (Node n : nodes) {
-			vertices[n.y][n.x] = n.state.value;
+			vertices[(int)n.y][(int)n.x] = n.state.value;
 		}
 
 		return new MapData(vertices, null);
@@ -120,15 +115,15 @@ public class QuadTree extends AbstractSearchSpace {
 
 		private State state = State.MIXED;
 
-		public QuadNode(int x, int y, int width, int height, int[][] data) {
+		public QuadNode(double x, double y, double width, double height, int[][] data) {
 			this.region = new AABB(x, y, width, height);
 
-			Object2ObjectOpenHashMap<Vertex, Node> obstacles = new Object2ObjectOpenHashMap<>(width * height);
+			Object2ObjectOpenHashMap<Point, Node> obstacles = new Object2ObjectOpenHashMap<Point, Node>((int)(width * height));
 			//List<Node> obstacles = new ArrayList<>();
 
-			for (int ry = y; ry < y + height; ry++) {
-				for (int rx = x ; rx < x + width; rx++) {
-					if (data[ry][rx] > 0) {
+			for (double ry = y; ry < y + height; ry++) {
+				for (double rx = x ; rx < x + width; rx++) {
+					if (data[(int)ry][(int)rx] > 0) {
 //    				System.out.println("Found obstacle " + rx + " " + ry);
 						Node n = new Node(rx, ry, NodeState.WALL);
 						obstacles.put(n, n);
@@ -140,15 +135,15 @@ public class QuadTree extends AbstractSearchSpace {
 
 		}
 
-		public QuadNode(int x, int y, int width, int height, Object2ObjectOpenHashMap<Vertex, Node> obstacles, QuadNode parent) {
+		public QuadNode(double x, double y, double width, double height, Object2ObjectOpenHashMap<Point, Node> obstacles, QuadNode parent) {
 			this.region = new AABB(x, y, width, height);
 			this.parent = parent;
 
 //    	System.out.println("Creating new node " + region + " with parent " + parent);
 
-			for (int ix = x; ix < x + width; ix++) {
-				for (int iy = y; iy < y + height; iy++) {
-					Node n = obstacles.get(new Vertex(ix, iy));
+			for (double ix = x; ix < x + width; ix++) {
+				for (double iy = y; iy < y + height; iy++) {
+					Node n = obstacles.get(new Point(ix, iy));
 					if (n == null)
 						continue;
 
@@ -166,13 +161,13 @@ public class QuadTree extends AbstractSearchSpace {
 			leaf = new Node(region.cx, region.cy, NodeState.EMPTY);
 		}
 
-		private void subdivide(Object2ObjectOpenHashMap<Vertex, Node> obstacles) {
+		private void subdivide(Object2ObjectOpenHashMap<Point, Node> obstacles) {
 //    	System.out.println("Subdividing " + region);
 
 			state = State.MIXED;
 
-			int newWidth = region.width / 2;
-			int newHeight = region.height / 2;
+			double newWidth = region.width / 2;
+			double newHeight = region.height / 2;
 
 			northWest = new QuadNode(region.x, region.y, newWidth, newHeight, obstacles, this);
 			northEast = new QuadNode(region.cx, region.y, newWidth, newHeight, obstacles, this);
@@ -202,8 +197,8 @@ public class QuadTree extends AbstractSearchSpace {
 				if (leaf != null) {
 					nodes.add(leaf);
 				} else {
-					for (int x = region.x; x < region.x + region.width; x++)
-						for (int y = region.y; y < region.y + region.width; y++)
+					for (double x = region.x; x < region.x + region.width; x++)
+						for (double y = region.y; y < region.y + region.width; y++)
 							nodes.add(new Node(x, y, NodeState.WALL));
 				}
 				return nodes;
@@ -383,7 +378,7 @@ public class QuadTree extends AbstractSearchSpace {
 			return state == State.OBSTRUCTED;
 		}
 
-		public Node getNearestLeaf(int x, int y) {
+		public Node getNearestLeaf(double x, double y) {
 			if (!region.contains(x, y))
 				return null;
 
@@ -396,7 +391,7 @@ public class QuadTree extends AbstractSearchSpace {
 
 		}
 
-		QuadNode getNearestNode(int x, int y) {
+		QuadNode getNearestNode(double x, double y) {
 			if (!region.contains(x, y))
 				return null;
 
@@ -421,7 +416,7 @@ public class QuadTree extends AbstractSearchSpace {
 			return leafNeighbours;
 		}
 
-		private QuadNode getRegion(int x, int y) {
+		private QuadNode getRegion(double x, double y) {
 			if (y < region.cy)
 				if (x < region.cx)
 					return northWest;
@@ -450,10 +445,10 @@ public class QuadTree extends AbstractSearchSpace {
 
 			}
 
-			for (int x = region.x; x < region.x + region.width; x++) {
-				for (int y = region.y; y < region.y + region.height; y++) {
+			for (double x = region.x; x < region.x + region.width; x++) {
+				for (double y = region.y; y < region.y + region.height; y++) {
 
-					pw.setColor(x, y, c);
+					pw.setColor((int)x, (int)y, c);
 				}
 			}
 

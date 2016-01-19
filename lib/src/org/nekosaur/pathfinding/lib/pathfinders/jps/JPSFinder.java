@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 import org.nekosaur.pathfinding.lib.common.Heuristics;
 import org.nekosaur.pathfinding.lib.common.Option;
 import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
 import org.nekosaur.pathfinding.lib.interfaces.Heuristic;
@@ -29,9 +29,10 @@ public class JPSFinder extends AbstractPathfinder {
     private Heuristic heuristic;
 
 	@Override
-	public Result findPath(SearchSpace map, Vertex start, Vertex goal, Heuristic heuristic, double weight)
+	public Result findPath(SearchSpace map, Point start, Point goal, Heuristic heuristic, double weight)
 			throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {
-		
+
+
 		if (!(map instanceof Grid))
 			throw new SearchSpaceNotSupportedException("JPSFinder can only run on Grid");
 		
@@ -72,7 +73,7 @@ public class JPSFinder extends AbstractPathfinder {
 
         }
 
-        return new Result(new ArrayList<Vertex>(), stopClock(), operations);
+        return new Result(new ArrayList<Point>(), stopClock(), operations);
 		
 	}
 	
@@ -131,12 +132,12 @@ public class JPSFinder extends AbstractPathfinder {
 
         Node parentNode = node.parent;
 
-        Vertex direction = getDirection(parentNode, node);
+        Point direction = getDirection(parentNode, node);
 
-        int dx = direction.x;
-        int dy = direction.y;
-        int x = node.x;
-        int y = node.y;
+        double dx = direction.x;
+        double dy = direction.y;
+        double x = node.x;
+        double y = node.y;
         //map.getMovementCost(parentNode, Node) > 1
         if (dx != 0 && dy != 0) {
             // diagonal movement
@@ -226,7 +227,7 @@ public class JPSFinder extends AbstractPathfinder {
      * was found
      * @throws InterruptedException
      */
-    private Node jump(Node initialNode, Vertex direction, Node goalNode) throws InterruptedException {
+    private Node jump(Node initialNode, Point direction, Node goalNode) throws InterruptedException {
 
         Node node = map.getNode(initialNode.x + direction.x, initialNode.y + direction.y);
 
@@ -243,10 +244,10 @@ public class JPSFinder extends AbstractPathfinder {
         node.status = NodeStatus.PEEKED;
         addToHistory(node);
 
-        int x = node.x;
-        int y = node.y;
-        int dx = direction.x;
-        int dy = direction.y;
+        double x = node.x;
+        double y = node.y;
+        double dx = direction.x;
+        double dy = direction.y;
         
         // Horizontal
         if (dy == 0) {
@@ -282,20 +283,20 @@ public class JPSFinder extends AbstractPathfinder {
             }
 
             // ... then jump horizontally and vertically from diagonal position
-            if (jump(node, new Vertex(dx, 0), goalNode) != null
-                    || jump(node, new Vertex(0, dy), goalNode) != null)
+            if (jump(node, new Point(dx, 0), goalNode) != null
+                    || jump(node, new Point(0, dy), goalNode) != null)
                 return node;
         }
 
         return jump(node, direction, goalNode);
     }
 
-    private Vertex getDirection(Node from, Node to) {
+    private Point getDirection(Node from, Node to) {
     	
-    	int dx = Math.max(-1, Math.min(1, to.x - from.x));
-        int dy = Math.max(-1, Math.min(1, to.y - from.y));
+    	int dx = (int)Math.floor(Math.max(-1, Math.min(1, to.x - from.x)));
+        int dy = (int)Math.floor(Math.max(-1, Math.min(1, to.y - from.y)));
 
-        return new Vertex(dx, dy);
+        return new Point(dx, dy);
 
     }
 

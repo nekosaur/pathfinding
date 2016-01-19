@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 
 import java.util.ArrayList;
 
@@ -37,15 +37,15 @@ public class Scenario {
 
                 if (version.equals("0.0")) {
                     experiments.add(new Experiment(
-                            new Vertex(Integer.parseInt(data[2]), Integer.parseInt(data[3])),
-                            new Vertex(Integer.parseInt(data[4]), Integer.parseInt(data[5])),
+                            new Point(Integer.parseInt(data[2]), Integer.parseInt(data[3])),
+                            new Point(Integer.parseInt(data[4]), Integer.parseInt(data[5])),
                             Integer.parseInt(data[0]),
                             Double.parseDouble(data[6]),
                             data[1]));
                 } else if (version.equals("1.0")) {
                     experiments.add(new Experiment(
-                            new Vertex(Integer.parseInt(data[4]), Integer.parseInt(data[5])),
-                            new Vertex(Integer.parseInt(data[6]), Integer.parseInt(data[7])),
+                            new Point(Integer.parseInt(data[4]), Integer.parseInt(data[5])),
+                            new Point(Integer.parseInt(data[6]), Integer.parseInt(data[7])),
                             Integer.parseInt(data[2]),
                             Integer.parseInt(data[3]),
                             Integer.parseInt(data[0]),
@@ -70,7 +70,7 @@ public class Scenario {
         return experiments.get(index);
     }
     
-    public void addExperiment(Vertex start, Vertex goal, int mapSize, double optimalLength) {
+    public void addExperiment(Point start, Point goal, int mapSize, double optimalLength) {
         experiments.add(new Experiment(start, goal, mapSize, mapSize, 0,optimalLength, fileName));
     }
     

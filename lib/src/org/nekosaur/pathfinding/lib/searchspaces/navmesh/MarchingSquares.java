@@ -2,7 +2,7 @@ package org.nekosaur.pathfinding.lib.searchspaces.navmesh;
 
 import java.util.*;
 
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 
 public class MarchingSquares {
 	
@@ -31,7 +31,7 @@ public class MarchingSquares {
 	
 	private int[][] data;
 
-	private Set<Vertex> visitedVertices = new HashSet<>();
+	private Set<Point> visitedVertices = new HashSet<>();
 	
 	public MarchingSquares(int[][] data) {
 		this.width = data[0].length;
@@ -39,11 +39,11 @@ public class MarchingSquares {
 		this.data = data;
 	}
 
-	public Set<List<Vertex>> identifyAll() {
-		Set<List<Vertex>> perimeters = new HashSet<>();
+	public Set<List<Point>> identifyAll() {
+		Set<List<Point>> perimeters = new HashSet<>();
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				List<Vertex> perimeter = identifyPerimeter(x, y);
+				List<Point> perimeter = identifyPerimeter(x, y);
 				if (perimeter != null)
 					perimeters.add(perimeter);
 			}
@@ -51,11 +51,11 @@ public class MarchingSquares {
 		return perimeters;
 	}
 	
-	public List<Vertex> identifyPerimeter(int x, int y) {
+	public List<Point> identifyPerimeter(int x, int y) {
 		if (!valueExists(x, y))
 			return null;
 
-		if (visitedVertices.contains(new Vertex(x + 1, y + 1)))
+		if (visitedVertices.contains(new Point(x + 1, y + 1)))
 			return null;
 		
 		int index = calculateIndex(x, y);
@@ -65,13 +65,13 @@ public class MarchingSquares {
 		
 		int startx = x;
 		int starty = y;
-		List<Vertex> perimeter = new LinkedList<>();
+		List<Point> perimeter = new LinkedList<>();
 		Direction previous = null;
 		int previousIndex = 0;
 		
 		do {
-			visitedVertices.add(new Vertex(x + 1, y + 1));
-			System.out.println("Adding " + new Vertex(x + 1, y + 1) + " to perimeter");
+			visitedVertices.add(new Point(x + 1, y + 1));
+			System.out.println("Adding " + new Point(x + 1, y + 1) + " to perimeter");
 			Direction direction = null;
 			
 			index = calculateIndex(x, y);
@@ -122,7 +122,7 @@ public class MarchingSquares {
 			}
 
 			if (previousIndex != index) {
-				Vertex v = new Vertex(x + 1, y + 1);
+				Point v = new Point(x + 1, y + 1);
 				perimeter.add(v);
 			}
 			
@@ -177,12 +177,12 @@ enum Direction {
 }
 
 class Edge {
-	private final Vertex start;
-	private final Vertex end;
+	private final Point start;
+	private final Point end;
 	
 	public Edge(int sx, int sy, int ex, int ey) {
-		start = new Vertex(sx, sy);
-		end = new Vertex(ex, ey);
+		start = new Point(sx, sy);
+		end = new Point(ex, ey);
 	}
 
 	@Override

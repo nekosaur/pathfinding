@@ -1,7 +1,7 @@
 package org.nekosaur.pathfinding.lib.pathfinders.dijkstra;
 
 import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
 import org.nekosaur.pathfinding.lib.interfaces.Heuristic;
@@ -22,7 +22,7 @@ import java.util.Set;
 public class DijkstraFinder extends AbstractPathfinder {
 
     @Override
-    public Result findPath(SearchSpace map, Vertex start, Vertex goal, Heuristic heuristic, double weight) throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {
+    public Result findPath(SearchSpace map, Point start, Point goal, Heuristic heuristic, double weight) throws NodeNotFoundException, SearchSpaceNotSupportedException, InterruptedException {
 
         Node startNode = map.getNode(start.x, start.y);
         Node goalNode = map.getNode(goal.x, goal.y);
@@ -83,7 +83,7 @@ public class DijkstraFinder extends AbstractPathfinder {
 
         }
 
-        return new Result(new ArrayList<Vertex>(), 0, stopClock(), operations);
+        return new Result(new ArrayList<Point>(), 0, stopClock(), operations);
         
     }
 }

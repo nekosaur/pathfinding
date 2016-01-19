@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 import org.nekosaur.pathfinding.gui.presentation.maps.AbstractSearchableMap;
 import org.nekosaur.pathfinding.lib.common.AABB;
 import org.nekosaur.pathfinding.lib.common.MapData;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.node.Node;
 import org.nekosaur.pathfinding.lib.node.NodeState;
 import org.nekosaur.pathfinding.lib.node.NodeStatus;
@@ -25,8 +25,8 @@ public class QuadTreeMap extends AbstractSearchableMap {
 
     private double scaleFactor = 1;
 
-    private Vertex trueStart;
-    private Vertex trueGoal;
+    private Point trueStart;
+    private Point trueGoal;
     
 	public QuadTreeMap(double width, double height, MapData data) {
         super(width, height);
@@ -56,7 +56,7 @@ public class QuadTreeMap extends AbstractSearchableMap {
                     goal.set(n);
                 }
 
-                trueGoal = new Vertex((int)(event.getX()), (int)(event.getY()));
+                trueGoal = new Point((int)(event.getX()), (int)(event.getY()));
                 update(n);
             } else {
                 if (n.equals(goal.get()))
@@ -70,7 +70,7 @@ public class QuadTreeMap extends AbstractSearchableMap {
                     start.set(n);
                 }
 
-                trueStart = new Vertex((int)(event.getX()), (int)(event.getY()));
+                trueStart = new Point((int)(event.getX()), (int)(event.getY()));
                 update(n);
             }
 
@@ -101,16 +101,16 @@ public class QuadTreeMap extends AbstractSearchableMap {
     }
 
     @Override
-    public void drawPath(List<Vertex> path) {
+    public void drawPath(List<Point> path) {
 
-        LinkedList<Vertex> centeredPath = new LinkedList<>();
+        LinkedList<Point> centeredPath = new LinkedList<>();
 
         path.forEach(v -> {
             QuadTree.QuadNode qn = ((QuadTree)searchSpace).getQuadNode(v.x, v.y);
             AABB region = qn.getRegion();
             int x = (int)(region.x / scaleFactor) + (int)(region.width / scaleFactor) / 2;
             int y = (int)(region.y / scaleFactor) + (int)(region.height / scaleFactor) / 2;
-            centeredPath.add(new Vertex(x, y));
+            centeredPath.add(new Point(x, y));
         });
 
         centeredPath.addFirst(trueGoal);

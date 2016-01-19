@@ -3,7 +3,6 @@ package org.nekosaur.pathfinding.lib.searchspaces.navmesh;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import org.nekosaur.pathfinding.lib.common.Vertex;
 
 /**
  * http://karthaus.nl/rdp/js/rdp2.js
@@ -17,7 +16,7 @@ public class DouglasPeucker {
 	
 	private DouglasPeucker() {}
 	
-	public static List<Vertex> reduce(List<Vertex> list, double epsilon) {
+	public static List<org.nekosaur.pathfinding.lib.common.Point> reduce(List<org.nekosaur.pathfinding.lib.common.Point> list, double epsilon) {
 		Point[] points = new Point[list.size()];
 		for (int i = 0; i < list.size(); i++) {
 			points[i] = new Point(list.get(i).x, list.get(i).y);
@@ -25,10 +24,10 @@ public class DouglasPeucker {
 
 		Point[] reduced = DouglasPeucker.reduce(points, epsilon);
 		//Vertex[] vertices = new Vertex[reduced.length];
-		List<Vertex> vertices = new LinkedList<>();
+		List<org.nekosaur.pathfinding.lib.common.Point> vertices = new LinkedList<>();
 
 		for (int i = 0; i < reduced.length; i++)
-			vertices.add(new Vertex((int)Math.round(reduced[i].x), (int)Math.round(reduced[i].y)));
+			vertices.add(new org.nekosaur.pathfinding.lib.common.Point((int)Math.round(reduced[i].x), (int)Math.round(reduced[i].y)));
 			//vertices[i] = new Vertex((int)Math.round(reduced[i].x), (int)Math.round(reduced[i].y));
 
 		return vertices;
@@ -94,12 +93,12 @@ public class DouglasPeucker {
 	   return c;
 	}
 	
-	public static Vertex topRight(List<Vertex> list) {
-		Vertex topRight = list.get(0);
+	public static org.nekosaur.pathfinding.lib.common.Point topRight(List<org.nekosaur.pathfinding.lib.common.Point> list) {
+		org.nekosaur.pathfinding.lib.common.Point topRight = list.get(0);
 		
 		for (int i = 1; i < list.size() - 1; i++) {
 				
-			Vertex v = list.get(i);
+			org.nekosaur.pathfinding.lib.common.Point v = list.get(i);
 			
 			if (v.x >= topRight.x)
 				if (v.y <= topRight.y)
@@ -110,11 +109,11 @@ public class DouglasPeucker {
 		return topRight;
 	}
 	
-	public static Vertex bottomRight(List<Vertex> list) {
-		Vertex bottomRight = list.get(0);
+	public static org.nekosaur.pathfinding.lib.common.Point bottomRight(List<org.nekosaur.pathfinding.lib.common.Point> list) {
+		org.nekosaur.pathfinding.lib.common.Point bottomRight = list.get(0);
 		
 		for (int i = 1; i < list.size() - 1; i++) {
-			Vertex v = list.get(i);
+			org.nekosaur.pathfinding.lib.common.Point v = list.get(i);
 			
 			if (v.y >= bottomRight.y) {
 				bottomRight = v;

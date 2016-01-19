@@ -10,22 +10,18 @@ import java.util.List;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
-import javafx.scene.paint.*;
 import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.lib.common.Option;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.exceptions.MissingMapDataException;
 import org.nekosaur.pathfinding.lib.interfaces.SearchSpace;
 import org.nekosaur.pathfinding.lib.node.Node;
 import org.nekosaur.pathfinding.lib.node.NodeState;
 import org.nekosaur.pathfinding.lib.searchspaces.AbstractSearchSpace;
-import org.nekosaur.pathfinding.lib.searchspaces.grid.Grid;
 
 import javafx.scene.image.Image;
 import org.poly2tri.triangulation.TriangulationPoint;
 import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
-import org.poly2tri.triangulation.point.TPoint;
 
 public class NavMesh extends AbstractSearchSpace {
 
@@ -59,9 +55,9 @@ public class NavMesh extends AbstractSearchSpace {
 			System.out.println("ASD");
 			obstaclePerimeters.add(obstacle);
 		}*/
-		Set<List<Vertex>> obstaclePerimeters = new HashSet<>();
+		Set<List<Point>> obstaclePerimeters = new HashSet<>();
 
-		for (List<Vertex> perimeter : ms.identifyAll()) {
+		for (List<Point> perimeter : ms.identifyAll()) {
 			System.out.println(perimeter);
 			obstaclePerimeters.add(VisvalingamWhyatt.reduce(perimeter, (int)(perimeter.size() * 0.7)));
 			//obstaclePerimeters.add(DouglasPeucker.reduce(perimeter, 0.5f));
@@ -113,19 +109,9 @@ public class NavMesh extends AbstractSearchSpace {
 
 	@Override
 	public double getMovementCost(Node n1, Node n2) {
-		Vertex d = n1.delta(n2);
+		Point d = n1.delta(n2);
 
 		return Math.sqrt(d.x*d.x + d.y*d.y);
-	}
-
-	@Override
-	public Node getNode(int x, int y) {
-		for (Map.Entry<DelaunayTriangle, Triangle> e : delaunayMap.entrySet()) {
-			DelaunayTriangle dt = e.getKey();
-			if (pointInTriangle(dt.points, x, y))
-				return e.getValue();
-		}
-		return null;
 	}
 
 	@Override
@@ -138,9 +124,9 @@ public class NavMesh extends AbstractSearchSpace {
 		return null;
 	}
 
-	public DelaunayTriangle getTriangle(int x, int y) {
+	public DelaunayTriangle getTriangle(double x, double y) {
 		for (Map.Entry<DelaunayTriangle, Triangle> e : delaunayMap.entrySet()) {
-			if ((new Vertex(x, y)).equals((Vertex)e.getValue()))
+			if ((new Point(x, y)).equals((Point)e.getValue()))
 				return e.getKey();
 		}
 		return null;
@@ -186,7 +172,7 @@ public class NavMesh extends AbstractSearchSpace {
 
 
 	@Override
-	public boolean isWalkableAt(int x, int y) {
+	public boolean isWalkableAt(double x, double y) {
 		Node n = getNode(x, y);
 		return n != null && n.state != NodeState.WALL;
 	}
@@ -281,7 +267,7 @@ public class NavMesh extends AbstractSearchSpace {
 		private DelaunayTriangle dt;
 
 		public Triangle(DelaunayTriangle dt) {
-			super((int)dt.centroid().getX(), (int)dt.centroid().getY());
+			super(dt.centroid().getX(), dt.centroid().getY());
 			System.out.println("Creating Triangle [x="+(int)dt.centroid().getX()+", y="+(int)dt.centroid().getY()+"]");
 
 			this.dt = dt;

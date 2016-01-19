@@ -2,7 +2,7 @@ package org.nekosaur.pathfinding.lib.tests;
 
 import org.nekosaur.pathfinding.lib.common.Heuristics;
 import org.nekosaur.pathfinding.lib.common.MapData;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.exceptions.SearchSpaceNotSupportedException;
 import org.nekosaur.pathfinding.lib.interfaces.Pathfinder;
@@ -38,7 +38,7 @@ public class GraphTest {
 		Pathfinder p = new AStarFinder();
 		
 		try {
-			p.findPath(g, new Vertex(0,0), new Vertex(2,6), Heuristics.euclidean, 1);
+			p.findPath(g, new Point(0,0), new Point(2,6), Heuristics.euclidean, 1);
 		} catch (NodeNotFoundException | SearchSpaceNotSupportedException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

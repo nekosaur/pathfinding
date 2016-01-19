@@ -3,7 +3,7 @@ package org.nekosaur.pathfinding.lib.pathfinders.astar;
 import java.util.ArrayList;
 
 import org.nekosaur.pathfinding.lib.common.Result;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.datastructures.BinaryHashHeap;
 import org.nekosaur.pathfinding.lib.exceptions.NodeNotFoundException;
 import org.nekosaur.pathfinding.lib.interfaces.Heuristic;
@@ -21,7 +21,7 @@ import org.nekosaur.pathfinding.lib.pathfinders.AbstractPathfinder;
 public class AStarFinder extends AbstractPathfinder {
 
 	@Override
-	public Result findPath(SearchSpace map, Vertex start, Vertex goal, Heuristic heuristic, double weight) throws NodeNotFoundException {
+	public Result findPath(SearchSpace map, Point start, Point goal, Heuristic heuristic, double weight) throws NodeNotFoundException {
 		
 		Node startNode = map.getNode(start.x, start.y);
 		Node goalNode = map.getNode(goal.x, goal.y);
@@ -96,7 +96,7 @@ public class AStarFinder extends AbstractPathfinder {
         }
 
         System.out.println("Could not find goal!");
-        return new Result(new ArrayList<Vertex>(), Double.MAX_VALUE, stopClock(), operations);
+        return new Result(new ArrayList<Point>(), Double.MAX_VALUE, stopClock(), operations);
 	}
 	
 }

@@ -2,7 +2,7 @@ package org.nekosaur.pathfinding.gui.presentation.maps.searchable;
 
 import org.nekosaur.pathfinding.gui.presentation.maps.AbstractSearchableMap;
 import org.nekosaur.pathfinding.lib.common.MapData;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 import org.nekosaur.pathfinding.lib.node.Node;
 import org.nekosaur.pathfinding.lib.searchspaces.graph.Graph;
 
@@ -27,7 +27,7 @@ public class GraphMap extends AbstractSearchableMap {
     }
 
     @Override
-    public void drawPath(List<Vertex> path) {
+    public void drawPath(List<Point> path) {
 
     }
 }

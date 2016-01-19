@@ -3,14 +3,11 @@ package org.nekosaur.pathfinding.gui.presentation.maps;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Rotate;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import org.nekosaur.pathfinding.lib.common.Vertex;
+import org.nekosaur.pathfinding.lib.common.Point;
 
 import java.util.List;
 
@@ -60,7 +57,7 @@ public class MapCanvas extends Pane {
         //gc.restore();
     }
 
-    public void drawLine(Vertex start, Vertex end, Paint color, double width, boolean dashed) {
+    public void drawLine(Point start, Point end, Paint color, double width, boolean dashed) {
         gcTop.setStroke(color);
         gcTop.setLineWidth(width);
 
@@ -72,15 +69,15 @@ public class MapCanvas extends Pane {
         //gc.strokeLine(snap(start.x), snap(start.y), snap(end.x), snap(end.y));
     }
 
-    public void drawLine(List<Vertex> path, Paint color, double width, boolean dashed) {
+    public void drawLine(List<Point> path, Paint color, double width, boolean dashed) {
         for (int i = 1; i < path.size(); i++) {
-            Vertex start = path.get(i - 1);
-            Vertex goal = path.get(i);
+            Point start = path.get(i - 1);
+            Point goal = path.get(i);
             drawLine(start, goal, color, width, dashed);
         }
     }
     
-    public void drawTriangle(Vertex position, double length, double angle, Color color) {
+    public void drawTriangle(Point position, double length, double angle, Color color) {
         gcTop.save();
     	
     	double[] center = new double[] {position.x, position.y};
