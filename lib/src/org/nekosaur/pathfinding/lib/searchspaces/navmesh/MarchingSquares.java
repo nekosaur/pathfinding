@@ -32,11 +32,26 @@ public class MarchingSquares {
 	private int[][] data;
 
 	private Set<Point> visitedVertices = new HashSet<>();
-	
+
 	public MarchingSquares(int[][] data) {
 		this.width = data[0].length;
 		this.height = data.length;
 		this.data = data;
+	}
+	
+	public MarchingSquares(byte[] data, int width, int height) {
+		this.width = width;
+		this.height = height;
+		this.data = new int[height][width];
+
+		int x, y;
+		for (int i = 0; i < data.length; i++){
+			x = i % width;
+			y = i / width;
+
+			this.data[y][x] = data[i];
+		}
+
 	}
 
 	public Set<List<Point>> identifyAll() {

@@ -65,7 +65,7 @@ public class MapTabPresenter implements Initializable {
         tabPane.getSelectionModel().selectedItemProperty().addListener((obs, o, n) -> {
         	System.out.println("Switching tabs!");
         	if (n.equals(searchTab))
-        		controller.postEvent(new SearchMapLoadEvent(editMap.getData()));
+        		controller.postEvent(new SearchMapLoadEvent(editMap.getMapData()));
         });
     }
 
@@ -100,12 +100,13 @@ public class MapTabPresenter implements Initializable {
         mapSize = e.getMapSize();
 
         if (editMap != null)
-            controller.postEvent(new EditMapLoadEvent(new MapData(new int[mapSize][mapSize], null)));
+            controller.postEvent(new EditMapLoadEvent(new MapData(mapSize, mapSize)));
     }
 
     @Subscribe
     public void handleEditMapLoadEvent(EditMapLoadEvent e) {
-        MapData data = e.getData() == null ? new MapData(new int[mapSize][mapSize], null) : e.getData();
+        //MapData data = e.getVertices() == null ? new MapData(new int[mapSize][mapSize], null) : e.getVertices();
+        MapData data = e.getData() == null ? new MapData(mapSize, mapSize) : e.getData();
         if (editMap != null) {
             editPane.getChildren().remove(editMap);
             editMap = null;
@@ -128,12 +129,12 @@ public class MapTabPresenter implements Initializable {
     	}
 
     	System.out.println("Loading search map");
-        //GridMap.create(MAP_WIDTH, MAP_HEIGHT, e.getData());
+        //GridMap.create(MAP_WIDTH, MAP_HEIGHT, e.getVertices());
     	Task<ISearchableMap> task = new Task<ISearchableMap>() {
 
             @Override
             protected ISearchableMap call() throws Exception {
-                return selectedSearchableMap.apply(MAP_WIDTH, MAP_HEIGHT, editMap.getData());
+                return selectedSearchableMap.apply(MAP_WIDTH, MAP_HEIGHT, editMap.getMapData());
             }
         };
     	

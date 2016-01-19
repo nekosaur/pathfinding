@@ -34,19 +34,19 @@ public class NavMesh extends AbstractSearchSpace {
 		super(width, height, EnumSet.of(Option.DIAGONAL_MOVEMENT, Option.MOVING_THROUGH_WALL_CORNERS));
 	}
 	
-	public static SearchSpace create(MapData data) {
-		if (!data.getVertices().isPresent())
+	public static SearchSpace create(MapData mapData) {
+		if (mapData.data == null)
 			throw new MissingMapDataException("Vertices missing");
 
-		int[][] vertices = data.getVertices().get();
+		byte[] data = mapData.data;
 		
-		NavMesh navMesh = new NavMesh(vertices[0].length, vertices[1].length);
+		NavMesh navMesh = new NavMesh(mapData.width, mapData.height);
 
-		navMesh.originalData = data;
+		navMesh.originalData = mapData;
 		
 		// Do MarchingSquares on all obstacles to get outlines
 		// Reduce vertices with VisvalingamWhyatt
-		MarchingSquares ms = new MarchingSquares(vertices);
+		MarchingSquares ms = new MarchingSquares(data, mapData.width, mapData.height);
 
 		/*
 		Set<List<Vertex>> obstaclePerimeters = new HashSet<>();

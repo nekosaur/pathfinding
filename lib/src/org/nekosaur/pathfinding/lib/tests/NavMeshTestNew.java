@@ -65,7 +65,7 @@ public class NavMeshTestNew {
 		
 		NavMesh navMesh = new NavMesh(10, 10);
 		
-		SearchSpace ss = NavMesh.create(new MapData(data, null));
+		SearchSpace ss = NavMesh.create(new MapData(data));
 
 		System.out.println(ss.getNode(0, 1));
 

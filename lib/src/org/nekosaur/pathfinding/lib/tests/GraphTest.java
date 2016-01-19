@@ -33,7 +33,7 @@ public class GraphTest {
 				{0,0,1,1,0}
 		};
 		
-		SearchSpace g = Graph.create(new MapData(vertices, edges));
+		SearchSpace g = Graph.create(new MapData(vertices));
 		
 		Pathfinder p = new AStarFinder();
 		

@@ -6,6 +6,6 @@ import org.nekosaur.pathfinding.lib.common.MapData;
  * @author nekosaur
  */
 public interface IEditableMap {
-	MapData getData();
+	MapData getMapData();
 	boolean isDirty();
 }

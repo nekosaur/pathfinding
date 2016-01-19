@@ -18,7 +18,7 @@ public class GridTest {
 		
 		int[][] data = MovingAI.loadMap(System.getProperty("user.dir") + "\\" + "brc000d.map");
 		
-		SearchSpace map = Grid.create(new MapData(data, null));
+		SearchSpace map = Grid.create(new MapData(data));
 		
 		Pathfinder f = new AStarFinder();
 		

@@ -6,11 +6,11 @@ import javafx.scene.paint.Color;
 
 @SuppressWarnings("restriction")
 public enum NodeState {
-	EMPTY(0), WALL(1), START(10), GOAL(20);
+	EMPTY((byte)0), WALL((byte)1), START((byte)10), GOAL((byte)20);
 
-	public int value;
+	public byte value;
 
-	private static final Map<Integer, NodeState> intToEnum = new HashMap<Integer, NodeState>();
+	private static final Map<Byte, NodeState> intToEnum = new HashMap<>();
 	private static final Map<NodeState, Color> enumToColor = new HashMap<>();
 
 	static {
@@ -24,11 +24,11 @@ public enum NodeState {
 		enumToColor.put(WALL, Color.rgb(20, 20, 20));
 	}
 
-	NodeState(int value) {
+	NodeState(byte value) {
 		this.value = value;
 	}
 
-	public static NodeState parse(int value) {
+	public static NodeState parse(byte value) {
 		return intToEnum.containsKey(value) ? intToEnum.get(value) : EMPTY;
 	}
 	

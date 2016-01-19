@@ -79,7 +79,7 @@ public class MarchingSquaresTest {
 		};
 		*/
 
-        SearchSpace grid = Grid.create(new MapData(data, null));
+        SearchSpace grid = Grid.create(new MapData(data));
 
         int imageSize = 512;
         int cellSize = imageSize / data.length;
@@ -97,8 +97,6 @@ public class MarchingSquaresTest {
                 g2d.drawOval(x * cellSize + (cellSize / 2), y * cellSize + (cellSize / 2), 5, 5);
             }
         }
-
-
 
 		MarchingSquares ms = new MarchingSquares(data);
 

@@ -13,7 +13,6 @@ import org.nekosaur.pathfinding.gui.business.TriFunction;
 import org.nekosaur.pathfinding.gui.business.events.ChangeEditableMapTypeEvent;
 import org.nekosaur.pathfinding.gui.business.events.ChangeMapSizeEvent;
 import org.nekosaur.pathfinding.gui.business.events.ChangeSearchableMapTypeEvent;
-import org.nekosaur.pathfinding.gui.presentation.maps.editable.EditableGraphMap;
 import org.nekosaur.pathfinding.gui.presentation.maps.editable.IEditableMap;
 import org.nekosaur.pathfinding.gui.presentation.maps.editable.EditableGridMap;
 import org.nekosaur.pathfinding.gui.presentation.maps.searchable.*;
@@ -21,7 +20,6 @@ import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.gui.business.events.EditMapLoadEvent;
 import org.nekosaur.pathfinding.lib.common.Option;
 import org.nekosaur.pathfinding.lib.movingai.MovingAI;
-import org.nekosaur.pathfinding.lib.searchspaces.navmesh.NavMesh;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -109,7 +107,6 @@ public class ControlPresenter implements Initializable {
 
         // TODO: put this somewhere else?
         editableMaps.put("Grid", EditableGridMap::new);
-        editableMaps.put("Graph", EditableGraphMap::new);
         searchableMaps.put("Grid", GridMap::new);
         searchableMaps.put("QuadTree", QuadTreeMap::new);
         searchableMaps.put("Graph", GraphMap::new);
@@ -199,7 +196,7 @@ public class ControlPresenter implements Initializable {
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
-            controller.postEvent(new EditMapLoadEvent(new MapData(MovingAI.loadMap(selectedFile), null)));
+            controller.postEvent(new EditMapLoadEvent(new MapData(MovingAI.loadMap(selectedFile))));
             //controller.loadMap(selectedFile, cboxIncludeScenario.selectedProperty().getValue());
         }
     }

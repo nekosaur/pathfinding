@@ -16,6 +16,8 @@ import org.nekosaur.pathfinding.lib.node.NodeState;
 @SuppressWarnings("restriction")
 public class EditableGridMap extends AbstractMap implements IEditableMap {
 
+
+
     private MapCanvas canvas;
 
     private boolean isDirty = false;
@@ -25,7 +27,7 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
     private double cellHeight;
     private double cellPadding = 0;
 
-    private int[][] data;
+    private MapData mapData;
 
 	public EditableGridMap(double width, double height, MapData mapData) {
         super();
@@ -37,12 +39,12 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
 
         this.canvas = new MapCanvas(width, height);
 
-        if (!mapData.getVertices().isPresent())
-        	throw new MissingMapDataException("Vertices missing");
-        
-        load(mapData.getVertices().get());
+        if (mapData.data == null)
+        	throw new MissingMapDataException("Data missing");
 
-        final ObjectProperty<Integer> startValue = new SimpleObjectProperty<>();
+        load(mapData);
+
+        final ObjectProperty<Byte> startValue = new SimpleObjectProperty<>();
         //final ObjectProperty<Vertex> currentPosition = new SimpleObjectProperty<>();
 
         canvas.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> {
@@ -54,11 +56,31 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
             if (x < 0 || x >= columns || y < 0 || y >= rows)
                 return;
 
-            data[y][x] = data[y][x] == 1 ? 0 : 1;
+            int i = y * mapData.width + x;
 
-            draw(x, y, NodeState.parse(data[y][x]));
+            mapData.data[i] = mapData.data[i] == 1 ? (byte)0 : (byte)1;
+            /*
+            int nx, ny;
+            if (vertices[y][x] == 1) {
+                vertices[y][x] = 0;
 
-            startValue.set(data[y][x]);
+                for (int i = 0; i < DIRECTIONS.length; i++) {
+                    nx = x + DIRECTIONS[i][0];
+                    ny = y + DIRECTIONS[i][1];
+
+                    if (nx > 0 && nx < vertices.length && ny > 0 && ny < vertices.length) {
+                        if (vertices[ny][nx] == 1) {
+                            edges[]
+                        }
+
+                    }
+
+                }
+            }*/
+
+            draw(x, y, NodeState.parse(mapData.data[i]));
+
+            startValue.set(mapData.data[i]);
 
         });
 
@@ -69,9 +91,10 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
             if (x < 0 || x >= columns || y < 0 || y >= rows)
                 return;
 
-            data[y][x] = startValue.get();
-            draw(x, y, NodeState.parse(data[y][x]));
+            int i = y * mapData.width + x;
 
+            mapData.data[i] = startValue.get();
+            draw(x, y, NodeState.parse(mapData.data[i]));
             
         });
 
@@ -79,9 +102,11 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
 
     }
 
-    public void load(int[][] data) {
-        this.columns = data[0].length;
-        this.rows = data.length;
+    public void load(MapData mapData) {
+        this.mapData = mapData;
+
+        this.columns = mapData.width;
+        this.rows = mapData.height;
         double cellSize = Math.min(width / columns, height / rows);
         this.cellWidth = cellSize;
         this.cellHeight = cellSize;
@@ -92,11 +117,11 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
 
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
-            	draw(x, y, NodeState.parse(data[y][x]));
+            	draw(x, y, NodeState.parse(this.mapData.data[y * mapData.width + x]));
             }
         }
 
-        this.data = data;
+
     }
     
     private void draw(int x, int y, NodeState state) {
@@ -105,9 +130,8 @@ public class EditableGridMap extends AbstractMap implements IEditableMap {
         isDirty = true;
     }
 
-	@Override
-	public MapData getData() {
-		return new MapData(data, null);
+	public MapData getMapData() {
+		return mapData;
 	}
 
 	@Override

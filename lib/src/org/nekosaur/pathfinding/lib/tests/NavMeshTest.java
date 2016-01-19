@@ -84,7 +84,7 @@ public class NavMeshTest {
 		};
 		*/
 		
-		SearchSpace grid = Grid.create(new MapData(data, null));
+		SearchSpace grid = Grid.create(new MapData(data));
 		
 		int imageSize = 512;
 		int cellSize = imageSize / data.length;

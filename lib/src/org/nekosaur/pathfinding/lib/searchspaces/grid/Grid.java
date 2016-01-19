@@ -32,19 +32,28 @@ public class Grid extends AbstractSearchSpace {
 		this.keys = new long[Math.max(width, height) * Math.max(width, height)];
 	}
 
-	public static SearchSpace create(MapData data) {
-		if (!data.getVertices().isPresent())
-			throw new MissingMapDataException("Vertices missing");
+	public static SearchSpace create(MapData mapData) {
+		if (mapData.data == null)
+			throw new MissingMapDataException("MapData missing");
 
-		int[][] vertices = data.getVertices().get();
+		byte[] nodes = mapData.data;
 
-		Grid grid = new Grid(vertices[0].length, vertices.length);
-		
-		for (int y = 0; y < vertices.length; y++) {
-            for (int x = 0; x < vertices[0].length; x++) {
-                    grid.addNode(new Node(x, y, NodeState.parse(vertices[y][x])));
+		Grid grid = new Grid(mapData.width, mapData.height);
+
+		int x, y;
+		for (int i = 0; i < nodes.length; i++) {
+			x = i % mapData.width;
+			y = i / mapData.width;
+
+			grid.addNode(new Node(x, y, NodeState.parse(nodes[i])));
+		}
+
+		/*
+		for (int y = 0; y < nodes.length; y++) {
+            for (int x = 0; x < nodes[0].length; x++) {
+                    grid.addNode(new Node(x, y, NodeState.parse(nodes[y][x])));
             }
-        }
+        }*/
 		
 		return (SearchSpace)grid;
 	}
@@ -192,15 +201,25 @@ public class Grid extends AbstractSearchSpace {
 	}
 
 	public MapData getMapData() {
+		/*
 		int[][] vertices = new int[height][width];
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				vertices[y][x] = grid.get(keys[y * height + x]).state.value;
 			}
+		}*/
+
+		byte[] data = new byte[width*height];
+
+		int x, y;
+		for (int i = 0; i < data.length; i++) {
+			//x = i % width;
+			//y = i / width;
+			data[i] = grid.get(keys[i]).state.value;
 		}
 
-		return new MapData(vertices, null);
+		return new MapData(data, width, height);
 	}
 
 	@Override

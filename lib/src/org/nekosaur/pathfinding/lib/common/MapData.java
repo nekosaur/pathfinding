@@ -1,36 +1,49 @@
 package org.nekosaur.pathfinding.lib.common;
 
-import java.util.Optional;
-
 /**
  * @author nekosaur
  */
 public class MapData {
 
-    private final int[][] vertices;
-    private final int[][] edges;
+    public final byte[] data;
+    public final int width;
+    public final int height;
     public final Point start;
     public final Point goal;
 
-    public MapData(int[][] vertices, int[][] edges) {
-        this.vertices = vertices;
-        this.edges = edges;
+    public MapData(int[][] data) {
+        this.width = data[0].length;
+        this.height = data.length;
+        this.data = new byte[width*height];
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                this.data[y * width + x] = (byte)data[y][x];
+            }
+        }
+
         this.start = null;
         this.goal = null;
     }
+
+    public MapData(int width, int height) {
+        this.data = new byte[width * height];
+        this.width = width;
+        this.height = height;
+        this.start = null;
+        this.goal = null;
+    }
+
+    public MapData(byte[] data, int width, int height) {
+        this(data, width, height, null, null);
+    }
     
-    public MapData(int[][] vertices, int[][] edges, Point start, Point goal) {
-        this.vertices = vertices;
-        this.edges = edges;
+    public MapData(byte[] data, int width, int height, Point start, Point goal) {
+        this.data = data;
+        this.width = width;
+        this.height = height;
         this.start = start;
         this.goal = goal;
     }
-    
-    public Optional<int[][]> getVertices() {
-    	return Optional.ofNullable(vertices);
-    }
-    
-    public Optional<int[][]> getEdges() {
-    	return Optional.of(edges);
-    }
+
 }

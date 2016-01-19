@@ -36,7 +36,7 @@ public class BFSTest {
 			{1,1,1,1,1,1,1,1}
 		};
 		
-		SearchSpace map = Grid.create(new MapData(vertices, null));
+		SearchSpace map = Grid.create(new MapData(vertices));
 		
 		Pathfinder f = new BFSFinder();
 		

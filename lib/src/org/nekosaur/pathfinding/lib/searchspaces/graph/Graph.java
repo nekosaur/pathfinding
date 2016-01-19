@@ -1,12 +1,15 @@
 package org.nekosaur.pathfinding.lib.searchspaces.graph;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import org.nekosaur.pathfinding.lib.common.MapData;
 import org.nekosaur.pathfinding.lib.common.Option;
 import org.nekosaur.pathfinding.lib.common.Point;
@@ -16,9 +19,21 @@ import org.nekosaur.pathfinding.lib.node.NodeState;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import org.nekosaur.pathfinding.lib.searchspaces.AbstractSearchSpace;
+import org.poly2tri.triangulation.delaunay.DelaunayTriangle;
 
 @SuppressWarnings("restriction")
 public class Graph extends AbstractSearchSpace {
+
+    private final static int[][] DIRECTIONS = new int[][] {
+            {-1, 0},
+            {-1, -1},
+            {0, -1},
+            {1, -1},
+            {1, 0},
+            {1, 1},
+            {0, 1},
+            {-1, 1}
+    };
 	
 	private final SecureRandom rand = new SecureRandom();
     private Long2ObjectOpenHashMap<GraphNode<Node>> nodes;
@@ -30,40 +45,49 @@ public class Graph extends AbstractSearchSpace {
         this.keys = new long[width * height];
     }
     
-    public static SearchSpace create(MapData data) {
+    public static SearchSpace create(MapData mapData) {
 
         // TODO: sanity check
-        int[][] nodes = data.getVertices().get();
-        int[][] edges = data.getEdges().get();
-    	
-    	Graph graph = new Graph(nodes[0].length, nodes.length);
-       
+        byte[] data = mapData.data;
+
+    	Graph graph = new Graph(mapData.width, mapData.height);
+
         ArrayList<Node> indexToVertex = new ArrayList<>();
         
         // Add nodes
-		for (int y = 0; y < nodes.length; y++) {
-            for (int x = 0; x < nodes[0].length; x++) {
-            	if (nodes[y][x] > 0) {
-            		Node n = new Node(x, y, NodeState.EMPTY);
-	                graph.addNode(n);
-	                indexToVertex.add(n);
-            	}
+        int x, y;
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] <= 0) {
+                x = i % mapData.width;
+                y = i / mapData.width;
+
+                Node n = new Node(x, y, NodeState.EMPTY);
+                graph.addNode(n);
+                indexToVertex.add(n);
             }
         }
 
-        // Add edges
-        for (int i = 0; i < edges.length; i++) {
-            Node n1 = indexToVertex.get(i);
-            
-            for (int e = 0; e < edges[i].length; e++) {
-                if (edges[i][e] > 0) {
-                    Node n2 = indexToVertex.get(e);
-                    System.out.println("Adding edge from " + n1 + " to " + n2);
-                    graph.addEdge(n1, n2, edges[i][e], true);
+        int nx, ny;
+        Node n2;
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] <= 0) {
+                x = i % mapData.width;
+                y = i / mapData.width;
+
+                Node n1 = graph.getNode(x, y);
+
+                for (int j = 0; j < DIRECTIONS.length; j++) {
+                    nx = x + DIRECTIONS[j][0];
+                    ny = y + DIRECTIONS[j][1];
+
+                    if (nx >= 0 && nx < mapData.width && ny >= 0 && ny < mapData.height && data[ny * mapData.width + nx] <= 0) {
+                        n2 = graph.getNode(nx, ny);
+                        graph.addEdge(n1, n2, 1, true);
+                    }
                 }
             }
         }
-        
+
         return (SearchSpace)graph;
     }
 
@@ -130,7 +154,53 @@ public class Graph extends AbstractSearchSpace {
 
     @Override
     public Image draw(int side) {
-        return null;
+        System.out.println("Graph draw");
+        BufferedImage bi = new BufferedImage(side, side, 3);
+        System.out.println(width + " " + height);
+
+        int scale = side / this.width;
+        int size = (int)((scale/(double)4)*3);
+        int offset = (scale - size)/2;
+
+        Graphics2D g2d = (Graphics2D)bi.getGraphics();
+
+        g2d.setColor(Color.DARK_GRAY);
+        g2d.fillRect(0, 0, side, side);
+        g2d.setColor(Color.WHITE);
+
+        int x, y;
+        GraphNode<Node> node;
+        for (int i = 0;  i < keys.length; i++) {
+            node = nodes.get(keys[i]);
+
+            if (node != null) {
+                x = (int) node.getNode().x;
+                y = (int) node.getNode().y;
+
+                g2d.fillOval(x * scale + offset, y * scale + offset, size, size);
+            }
+
+        }
+
+        /*
+        for (Map.Entry<DelaunayTriangle, Triangle> e : delaunayMap.entrySet()) {
+            DelaunayTriangle dt = e.getKey();
+
+            int[] xPoints = new int[] { (int)(dt.points[0].getX() * scale), (int)(dt.points[1].getX() * scale), (int)(dt.points[2].getX() * scale)};
+            int[] yPoints = new int[] { (int)(dt.points[0].getY() * scale), (int)(dt.points[1].getY() * scale), (int)(dt.points[2].getY() * scale)};
+
+            g2d.setColor(new Color(0.9607843f, 0.9607843f, 0.9607843f));
+            g2d.fillPolygon(xPoints, yPoints, 3);
+            g2d.setColor(Color.CYAN);
+            g2d.setStroke(new BasicStroke(2));
+            g2d.drawLine(xPoints[0], yPoints[0], xPoints[1], yPoints[1]);
+            g2d.drawLine(xPoints[1], yPoints[1], xPoints[2], yPoints[2]);
+            g2d.drawLine(xPoints[2], yPoints[2], xPoints[0], yPoints[0]);
+        }
+        */
+
+        return SwingFXUtils.toFXImage(bi, null);
+
     }
 
     public boolean isWalkableAt(Point p) {

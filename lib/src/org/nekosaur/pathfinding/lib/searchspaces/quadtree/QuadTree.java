@@ -26,12 +26,13 @@ public class QuadTree extends AbstractSearchSpace {
 		super(width, height, options);
 	}
 	
-	public static SearchSpace create(MapData data, EnumSet<Option> options) {
-		int[][] nodes = data.getVertices().get();
+	public static SearchSpace create(MapData mapData, EnumSet<Option> options) {
+		//int[][] nodes = data.getVertices().get();
+		byte[] data = mapData.data;
 
-		QuadTree qt = new QuadTree(nodes[0].length, nodes.length, options);
+		QuadTree qt = new QuadTree(mapData.width, mapData.height, options);
 		
-		qt.root = new QuadNode(0, 0, qt.width, qt.height, nodes);
+		qt.root = new QuadNode(0, 0, qt.width, qt.height, data);
 		
 		return (SearchSpace)qt;
 	}
@@ -78,15 +79,18 @@ public class QuadTree extends AbstractSearchSpace {
 	}
 
 	public MapData getMapData() {
-		int[][] vertices = new int[height][width];
+		byte[] data = new byte[width*height];
 
 		List<Node> nodes = root.getNodes(new ArrayList<>());
 
+		int x, y;
 		for (Node n : nodes) {
-			vertices[(int)n.y][(int)n.x] = n.state.value;
+			x = (int)(n.x % width);
+			y = (int)(n.y / height);
+			data[y * width + x] = n.state.value;
 		}
 
-		return new MapData(vertices, null);
+		return new MapData(data, width, height);
 	}
 
 	@Override
@@ -115,12 +119,24 @@ public class QuadTree extends AbstractSearchSpace {
 
 		private State state = State.MIXED;
 
-		public QuadNode(double x, double y, double width, double height, int[][] data) {
+		public QuadNode(double x, double y, double width, double height, byte[] data) {
 			this.region = new AABB(x, y, width, height);
 
 			Object2ObjectOpenHashMap<Point, Node> obstacles = new Object2ObjectOpenHashMap<Point, Node>((int)(width * height));
 			//List<Node> obstacles = new ArrayList<>();
 
+			double rx, ry;
+			for (int i = 0; i < data.length; i++) {
+				rx = i % width;
+				ry = i / width;
+
+				if (data[i] > 0) {
+					Node n = new Node(rx, ry, NodeState.WALL);
+					obstacles.put(n, n);
+				}
+			}
+
+			/*
 			for (double ry = y; ry < y + height; ry++) {
 				for (double rx = x ; rx < x + width; rx++) {
 					if (data[(int)ry][(int)rx] > 0) {
@@ -130,6 +146,7 @@ public class QuadTree extends AbstractSearchSpace {
 					}
 				}
 			}
+			*/
 
 			subdivide(obstacles);
 
