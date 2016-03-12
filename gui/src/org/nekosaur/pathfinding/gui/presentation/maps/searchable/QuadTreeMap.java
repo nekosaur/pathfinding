@@ -113,8 +113,8 @@ public class QuadTreeMap extends AbstractSearchableMap {
             centeredPath.add(new Point(x, y));
         });
 
-        centeredPath.addFirst(trueGoal);
-        centeredPath.addLast(trueStart);
+        //centeredPath.addFirst(trueGoal);
+        //centeredPath.addLast(trueStart);
 
         canvas.drawLine(centeredPath, Color.YELLOW, lineWidth, false);
     }
