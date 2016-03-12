@@ -21,6 +21,7 @@ import org.nekosaur.pathfinding.lib.searchspaces.AbstractSearchSpace;
 public class QuadTree extends AbstractSearchSpace {
 	
 	private QuadNode root = null;
+	private MapData mapData = null;
 	
 	private QuadTree(int width, int height, EnumSet<Option> options) {
 		super(width, height, options);
@@ -33,6 +34,7 @@ public class QuadTree extends AbstractSearchSpace {
 		QuadTree qt = new QuadTree(mapData.width, mapData.height, options);
 		
 		qt.root = new QuadNode(0, 0, qt.width, qt.height, data);
+		qt.mapData = mapData;
 		
 		return (SearchSpace)qt;
 	}
@@ -95,7 +97,7 @@ public class QuadTree extends AbstractSearchSpace {
 
 	@Override
 	public SearchSpace copy() {
-		return QuadTree.create(getMapData(), options);
+		return QuadTree.create(mapData, options);
 	}
 
 	public static class QuadNode {
@@ -128,7 +130,7 @@ public class QuadTree extends AbstractSearchSpace {
 			double rx, ry;
 			for (int i = 0; i < data.length; i++) {
 				rx = i % width;
-				ry = i / width;
+				ry = i / (int)width;
 
 				if (data[i] > 0) {
 					Node n = new Node(rx, ry, NodeState.WALL);
