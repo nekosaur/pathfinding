@@ -182,23 +182,6 @@ public class Graph extends AbstractSearchSpace {
 
         }
 
-        /*
-        for (Map.Entry<DelaunayTriangle, Triangle> e : delaunayMap.entrySet()) {
-            DelaunayTriangle dt = e.getKey();
-
-            int[] xPoints = new int[] { (int)(dt.points[0].getX() * scale), (int)(dt.points[1].getX() * scale), (int)(dt.points[2].getX() * scale)};
-            int[] yPoints = new int[] { (int)(dt.points[0].getY() * scale), (int)(dt.points[1].getY() * scale), (int)(dt.points[2].getY() * scale)};
-
-            g2d.setColor(new Color(0.9607843f, 0.9607843f, 0.9607843f));
-            g2d.fillPolygon(xPoints, yPoints, 3);
-            g2d.setColor(Color.CYAN);
-            g2d.setStroke(new BasicStroke(2));
-            g2d.drawLine(xPoints[0], yPoints[0], xPoints[1], yPoints[1]);
-            g2d.drawLine(xPoints[1], yPoints[1], xPoints[2], yPoints[2]);
-            g2d.drawLine(xPoints[2], yPoints[2], xPoints[0], yPoints[0]);
-        }
-        */
-
         return SwingFXUtils.toFXImage(bi, null);
 
     }
