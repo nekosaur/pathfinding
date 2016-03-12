@@ -62,7 +62,7 @@ public class Node extends Point implements Comparable<Node>, Copy<Node> {
 	
 	@Override
     public String toString() {
-        return String.format("%s G=%.2f H=%.2f F=%.2f STATE=%s STATUS=%s PARENT=%s", super.toString(), g, h, getF(), state, status, parent != null ? parent.toString() : "null");
+        return String.format("%s G=%.2f H=%.2f F=%.2f STATE=%s STATUS=%s", super.toString(), g, h, getF(), state, status);
     }
 	
 }
